@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Redux &#x2F; react-redux 学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redux">
+<meta property="og:url" content="http://example.com/2022/06/22/Redux/index.html">
+<meta property="og:site_name" content="Cheng Huang&#39;s Blog">
+<meta property="og:description" content="Redux &#x2F; react-redux 学习">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/WeChat2d45df36197946dee560f425f2a918e6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220623162623.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220625115537.png">
+<meta property="article:published_time" content="2022-06-22T12:26:09.000Z">
+<meta property="article:modified_time" content="2022-06-25T09:56:15.322Z">
+<meta property="article:author" content="Cheng Huang">
+<meta property="article:tag" content="Redux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/WeChat2d45df36197946dee560f425f2a918e6.png">
+
+
+<link rel="canonical" href="http://example.com/2022/06/22/Redux/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/22/Redux/","path":"2022/06/22/Redux/","title":"Redux"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Redux | Cheng Huang's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Cheng Huang's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redux-%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">Redux 安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redux-%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">Redux 原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#action-creator-x2F-action"><span class="nav-number">2.1.</span> <span class="nav-text">action creator &#x2F; action</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5action"><span class="nav-number">2.1.1.</span> <span class="nav-text">异步action</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch"><span class="nav-number">2.2.</span> <span class="nav-text">dispatch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#store"><span class="nav-number">2.3.</span> <span class="nav-text">store</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reducers"><span class="nav-number">2.4.</span> <span class="nav-text">reducers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#react-redux"><span class="nav-number">3.</span> <span class="nav-text">react-redux</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#react-redux%E5%8E%9F%E7%90%86%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">react-redux原理图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E4%B8%80%EF%BC%9AAPI%E5%B1%82%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96%E7%AE%80%E5%86%99%E6%96%B9%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">优化一：API层面的优化简写方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E4%BA%8C%EF%BC%9A"><span class="nav-number">4.2.</span> <span class="nav-text">优化二：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E4%B8%89%EF%BC%9A%E6%96%87%E4%BB%B6%E5%B1%82%E9%9D%A2%E7%9A%84%E4%BC%98%E5%8C%96"><span class="nav-number">4.3.</span> <span class="nav-text">优化三：文件层面的优化</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Cheng Huang</p>
+  <div class="site-description" itemprop="description">记录生活 留下感动 | Leave an impression in my life by recording routines</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kouteisang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kouteisang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:huangchengadam@gmail.com" title="E-Mail → mailto:huangchengadam@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/iamkoutei3n" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;iamkoutei3n" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/kouteisang/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;kouteisang&#x2F;" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/22/Redux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Cheng Huang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cheng Huang's Blog">
+      <meta itemprop="description" content="记录生活 留下感动 | Leave an impression in my life by recording routines">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Redux | Cheng Huang's Blog">
+      <meta itemprop="description" content="Redux / react-redux 学习">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redux
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-06-22 14:26:09" itemprop="dateCreated datePublished" datetime="2022-06-22T14:26:09+02:00">2022-06-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-25 11:56:15" itemprop="dateModified" datetime="2022-06-25T11:56:15+02:00">2022-06-25</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/06/22/Redux/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/22/Redux/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">Redux / react-redux 学习</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Redux-安装"><a href="#Redux-安装" class="headerlink" title="Redux 安装"></a>Redux 安装</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># NPM</span><br><span class="line">npm install redux</span><br><span class="line"></span><br><span class="line"># Yarn</span><br><span class="line">yarn add redux</span><br></pre></td></tr></table></figure>
+
+<h1 id="Redux-原理"><a href="#Redux-原理" class="headerlink" title="Redux 原理"></a>Redux 原理</h1><p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/WeChat2d45df36197946dee560f425f2a918e6.png" alt="Redux原理图"></p>
+<h2 id="action-creator-x2F-action"><a href="#action-creator-x2F-action" class="headerlink" title="action creator &#x2F; action"></a>action creator &#x2F; action</h2><p><strong>action creator要做的事情就是把我们要做的事情包装成一个action对象</strong></p>
+<p>action分为<strong>同步action</strong>和<strong>异步action</strong>。</p>
+<p>若action是一个<strong>同步action</strong>，则action只是一个<strong>简简单单的js对象</strong>，里面存储了要做的事情和要做的数据。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    type: &#x27;ADD_STUDENT&#x27;,</span><br><span class="line">    data: &#123;name:&#x27;cheng&#x27;, age:22&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例如: +1，type就是+，data是1。</p>
+<p>若action是一个<strong>异步action</strong>，则action是一个<strong>函数</strong>。</p>
+<h3 id="异步action"><a href="#异步action" class="headerlink" title="异步action"></a>异步action</h3><p> 若为一个异步action，则action为一个函数，可是我们的reducer不能处理函数，只能处理对象类型的action，因此为了解决这个问题我们需要引入一个中间件。<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add redux-thunk</span><br></pre></td></tr></table></figure><br> 异步action的返回值是一个函数，该函数中写异步任务，所以这个中间件的作用是帮助我们调用这个函数，等调用完这个函数（异步任务处理完成后），我们再发送一个对象类型的真正的同步action去给reducer处理。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> //引入redux-thunk中间件，只有包裹了这个中间件store才能执行异步action返回的函数</span><br><span class="line">import thunk from &#x27;redux-thunk&#x27;</span><br><span class="line">//引入为Count组件服务的reducer</span><br><span class="line">import CountReducer from &#x27;./count_reducer&#x27;</span><br><span class="line"></span><br><span class="line">//为store包裹中间件使其能够处理异步action</span><br><span class="line">const store = createStore(CountReducer, applyMiddleware(thunk))</span><br></pre></td></tr></table></figure>
+
+<p>以下代码是一个异步action,这个异步的action需要return一个函数，这个函数被中间件包裹的stroe执行后再分发一个同步action给reducer执行。<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> //异步action就是值action的值为函数</span><br><span class="line">//异步action中一般都会调用同步action</span><br><span class="line">//异步action不是必须要用的</span><br><span class="line">const createIncrementAsyncAction = (data, time) =&gt; &#123;</span><br><span class="line">    return (dispatch)=&gt;&#123;</span><br><span class="line">        setTimeout(()=&gt;&#123;</span><br><span class="line">            //分发一个同步action去执行数据</span><br><span class="line">             dispatch(createIncrementAction(data))</span><br><span class="line">        &#125;, time)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="dispatch"><a href="#dispatch" class="headerlink" title="dispatch"></a>dispatch</h2><p>dispatch将这个action分发出去，交给可以处理的“人”。</p>
+<h2 id="store"><a href="#store" class="headerlink" title="store"></a>store</h2><p>store是一个调度者，是一个指挥者。（就像饭店老板）。组件通过getState()得到更新好之后的状态。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123;legacy_createStore as createStore&#125; from &quot;redux&quot;</span><br></pre></td></tr></table></figure>
+
+<p>store并不是自己创建的，我们从redux中获得store，并且store身上有许多的API</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(action) //参数为action,将这个action交给reducer进行处理</span><br><span class="line">store.getState() //得到store中管理的状态</span><br><span class="line">store.subscribe() //每次store中状态发生改变，这个函数都会执行</span><br></pre></td></tr></table></figure>
+
+<h2 id="reducers"><a href="#reducers" class="headerlink" title="reducers"></a>reducers</h2><p>reducers 才是真正对状态进行修改的人。（就像厨师）（饭店老板store是一个调度者，将数据“订单”传递给了reducers，reducers是一个厨师，进行真正数据处理）</p>
+<p>Reducers需要接受previousState和action两个参数。比如action是+2，但是reducers如果不知道原来的状态数据，就无法对其+2。</p>
+<p>Reducers可以做两件事情，第一件事情是<strong>初始化状态</strong>，第二件事情是<strong>加工状态</strong>。如果没有初始化的状态根本没办法进行状态加工。</p>
+<p><strong>在进行状态初始化的时候previousState是undefined</strong></p>
+<p>在reducers初始化状态的时候,type是@@redux&#x2F;init,并没有携带data</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    type:@@redux/init</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="react-redux"><a href="#react-redux" class="headerlink" title="react-redux"></a>react-redux</h1><h2 id="react-redux原理图"><a href="#react-redux原理图" class="headerlink" title="react-redux原理图"></a>react-redux原理图</h2><p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220623162623.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add react-redux</span><br></pre></td></tr></table></figure>
+
+<p>一般UI组件放在component文件夹下，容器组件放在container文件夹下</p>
+<p>容器组件不是自己构造的，是通过react-redux进行引入的。</p>
+<p>我们只使用redux就已经可以完成状态管理了，那么我们为什么还要引入react-redux呢。这是因为我们曾经使用redux操作redux状态的方法是放在UI组件的例如: store.getState(), store.dispatch()等。但是我们想要做的是UI组件只关注UI本身，不涉及对redux的操作，因此我们使用react-redux，将对redux的操作放在容器组件。UI组件和容器组件的信息传递通过props来实现。</p>
+<ol>
+<li>UI组件：不能使用任何redux的api，只负责页面的呈现和交互</li>
+<li>容器组件：负责和redux通信，将结果交给UI组件</li>
+</ol>
+<p>react-redux相当于实现了结耦。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//传递状态</span><br><span class="line">const mapStateToProps = (state) =&gt;&#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        count:state</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//传递操作状态的方法</span><br><span class="line">const mapDispatchToProps = (dispatch) =&gt; &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        jia: (val)=&gt;&#123;</span><br><span class="line">            dispatch(createIncrementAction(val))</span><br><span class="line">        &#125;,</span><br><span class="line">        jian: (val) =&gt; &#123;</span><br><span class="line">            dispatch(createDecrementAction(val));</span><br><span class="line">        &#125;,</span><br><span class="line">        jiaAsync:(val, time) =&gt; &#123;</span><br><span class="line">            dispatch(createIncrementAsyncAction(val, time));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//使用connect()()创建一个Count的容器组件</span><br><span class="line">//mapStateToProps 传递状态</span><br><span class="line">//mapDispatchToProps 传递操作状态的方法</span><br><span class="line">//CountUI为其对象的UI组件</span><br><span class="line">const CountContainer = connect(mapStateToProps, mapDispatchToProps)(CountUI)</span><br><span class="line"></span><br><span class="line">export default CountContainer;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>使用connect()()创建一个Count的容器组件</li>
+<li>mapStateToProps 传递状态</li>
+<li>mapDispatchToProps 传递操作状态的方法</li>
+<li>容器组件的store是靠props传递进去的，而不是在容器组件中直接引入的。</li>
+</ol>
+<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><h2 id="优化一：API层面的优化简写方式"><a href="#优化一：API层面的优化简写方式" class="headerlink" title="优化一：API层面的优化简写方式"></a>优化一：API层面的优化简写方式</h2><ol>
+<li>第一个参数为一个函数，用来传递状态。就是原来的mapStateToProps</li>
+<li>第二个参数为一个对象，对象的value是创建action的方法。这里之所以dispatch没有了是因为我们的react-redux会自动帮我们dispatch。就是原来的mapDispatchToProps。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const CountContainer = connect(</span><br><span class="line">    //这个state就是redux中保存的状态</span><br><span class="line">    (state) =&gt; (&#123;count:state&#125;), </span><br><span class="line">    &#123;</span><br><span class="line">        jia: createIncrementAction,</span><br><span class="line">        jian: createDecrementAction,</span><br><span class="line">        jiaAsync: createIncrementAsyncAction</span><br><span class="line">    &#125;</span><br><span class="line">)(CountUI)</span><br><span class="line"></span><br><span class="line">export default CountContainer;</span><br></pre></td></tr></table></figure>
+
+<h2 id="优化二："><a href="#优化二：" class="headerlink" title="优化二："></a>优化二：</h2><ol>
+<li><p><strong>我们不再需要自己监测状态的改变</strong>，即在index.js中我们不需要自己store.subscribe监测状态的改变后进行刷新。这是因为我们的容器组件已经拥有监测状态改变的能力。</p>
+</li>
+<li><p>store可以直接在入口文件进行传递，Provider从react-redux中获取。</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import React from &#x27;react&#x27;;</span><br><span class="line">import ReactDOM from &#x27;react-dom/client&#x27;;</span><br><span class="line">import store from &#x27;./redux/store&#x27;;</span><br><span class="line">import &#123; Provider &#125; from &#x27;react-redux&#x27;;</span><br><span class="line"></span><br><span class="line">const root = ReactDOM.createRoot(document.getElementById(&#x27;root&#x27;));</span><br><span class="line"></span><br><span class="line">root.render(</span><br><span class="line">  &lt;Provider store = &#123;store&#125;&gt;</span><br><span class="line">    &lt;App /&gt;</span><br><span class="line">  &lt;/Provider&gt;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h2 id="优化三：文件层面的优化"><a href="#优化三：文件层面的优化" class="headerlink" title="优化三：文件层面的优化"></a>优化三：文件层面的优化</h2><p>我们在进行开发时，如果一个组件用到了redux那么我们即需要为其编写UI组件又要为其编写container组件。如果基数非常大，那么我们需要多写很多container组件。为了解决这一问题，我们希望把UI组件和container组件进行整合。<br><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220625115537.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Redux/" rel="tag"># Redux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/06/20/axios%E5%B0%81%E8%A3%85/" rel="prev" title="axios封装">
+                  <i class="fa fa-chevron-left"></i> axios封装
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cheng Huang | 黄程</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"iamkoutei","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
