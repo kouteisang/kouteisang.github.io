@@ -20,29 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Axios是我们很常见的http请求工具，但是在一般开发过程中我们还需要对axios进行封装。">
+    <meta name="description" content="路由懒加载">
 <meta property="og:type" content="article">
-<meta property="og:title" content="axios封装">
-<meta property="og:url" content="http://example.com/2022/06/20/axios%E5%B0%81%E8%A3%85/index.html">
+<meta property="og:title" content="react路由懒加载">
+<meta property="og:url" content="http://example.com/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/index.html">
 <meta property="og:site_name" content="Cheng Huang&#39;s Blog">
-<meta property="og:description" content="Axios是我们很常见的http请求工具，但是在一般开发过程中我们还需要对axios进行封装。">
+<meta property="og:description" content="路由懒加载">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-06-20T15:18:40.000Z">
-<meta property="article:modified_time" content="2022-06-26T07:52:57.811Z">
+<meta property="article:published_time" content="2022-06-26T07:52:26.000Z">
+<meta property="article:modified_time" content="2022-06-26T09:07:54.265Z">
 <meta property="article:author" content="Cheng Huang">
-<meta property="article:tag" content="Axios">
 <meta property="article:tag" content="react">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2022/06/20/axios%E5%B0%81%E8%A3%85/">
+<link rel="canonical" href="http://example.com/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/20/axios%E5%B0%81%E8%A3%85/","path":"2022/06/20/axios封装/","title":"axios封装"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/","path":"2022/06/26/react路由懒加载/","title":"react路由懒加载"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>axios封装 | Cheng Huang's Blog</title>
+<title>react路由懒加载 | Cheng Huang's Blog</title>
   
 
 
@@ -117,7 +116,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AAdome%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">一个dome代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">为什么使用路由懒加载？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">如何使用？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85react-loadable"><span class="nav-number">2.1.1.</span> <span class="nav-text">安装react-loadable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.1.2.</span> <span class="nav-text">导入项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E6%87%92%E5%8A%A0%E8%BD%BD-demo"><span class="nav-number">2.1.3.</span> <span class="nav-text">组件懒加载 demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5"><span class="nav-number">2.2.1.</span> <span class="nav-text">导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%87%92%E5%8A%A0%E8%BD%BD%E7%BB%84%E4%BB%B6"><span class="nav-number">2.2.2.</span> <span class="nav-text">懒加载组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Suspense-%E6%9C%AA%E5%8A%A0%E8%BD%BD%E5%87%BA%E7%BB%84%E4%BB%B6%E4%B9%8B%E5%89%8D%E5%B1%95%E7%A4%BA%E7%9A%84loading"><span class="nav-number">2.2.3.</span> <span class="nav-text">Suspense 未加载出组件之前展示的loading</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -189,7 +188,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/20/axios%E5%B0%81%E8%A3%85/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -202,12 +201,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="axios封装 | Cheng Huang's Blog">
-      <meta itemprop="description" content="Axios是我们很常见的http请求工具，但是在一般开发过程中我们还需要对axios进行封装。">
+      <meta itemprop="name" content="react路由懒加载 | Cheng Huang's Blog">
+      <meta itemprop="description" content="路由懒加载">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          axios封装
+          react路由懒加载
         </h1>
 
         <div class="post-meta-container">
@@ -217,15 +216,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2022-06-20 17:18:40" itemprop="dateCreated datePublished" datetime="2022-06-20T17:18:40+02:00">2022-06-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-06-26 09:52:57" itemprop="dateModified" datetime="2022-06-26T09:52:57+02:00">2022-06-26</time>
+      <time title="Created: 2022-06-26 09:52:26 / Modified: 11:07:54" itemprop="dateCreated datePublished" datetime="2022-06-26T09:52:26+02:00">2022-06-26</time>
     </span>
 
   
@@ -237,15 +230,15 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2022/06/20/axios%E5%B0%81%E8%A3%85/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/20/axios封装/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/26/react路由懒加载/" itemprop="commentCount"></span>
     </a>
   </span>
   
   
 </div>
 
-            <div class="post-description">Axios是我们很常见的http请求工具，但是在一般开发过程中我们还需要对axios进行封装。</div>
+            <div class="post-description">路由懒加载</div>
         </div>
       </header>
 
@@ -253,19 +246,23 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Axios是我们很常见的http请求工具，但是在一般开发过程中我们还需要对axios进行封装。</p>
-<p>最简单的封装分为三个步骤</p>
-<ul>
-<li><p>创建axios实例</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const http = axios.create(&#123;</span><br><span class="line">    baseURL: serverConfig.baseURL, // baseURL</span><br><span class="line">    timeout: 5000 //超时处理</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
-<li><p>请求拦截：请求拦截所做的工作主要为若为post请求修改请求头信息，为请求头添加token信息</p>
-</li>
-<li><p>响应拦截：响应拦截所做的工作为错误处理，如果是正常的数据(响应状态码为200)直接返回，否则我们应当根据错误码进行不同的错误处理。</p>
-</li>
-</ul>
-<h2 id="一个dome代码"><a href="#一个dome代码" class="headerlink" title="一个dome代码"></a>一个dome代码</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">import axios from &quot;axios&quot;;</span><br><span class="line">import qs from &quot;qs&quot;;</span><br><span class="line">import serverConfig from &quot;./api&quot;;</span><br><span class="line"></span><br><span class="line">//创建axios实例</span><br><span class="line">const http = axios.create(&#123;</span><br><span class="line">    baseURL: serverConfig.baseURL, // baseURL</span><br><span class="line">    timeout: 5000 //超时处理</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 这里取决于登录的时候将 token 存储在哪里</span><br><span class="line">const token = localStorage.getItem(&#x27;token&#x27;)</span><br><span class="line"></span><br><span class="line">// 请求拦截</span><br><span class="line">// 这里面接受两个回调函数，一个是成功，另一个是失败</span><br><span class="line">http.interceptors.request.use(</span><br><span class="line">    (config)=&gt;&#123;</span><br><span class="line">        if(config.method === &quot;post&quot;)&#123;</span><br><span class="line">            config.headers[&quot;content-type&quot;] = &quot;application/x-www-form-urlencoded&quot;;</span><br><span class="line">            config.data = qs.stringify(config.data);</span><br><span class="line">        &#125;</span><br><span class="line">        token &amp;&amp; (config.headers.Authorization = token);</span><br><span class="line">        return config;</span><br><span class="line">    &#125;, </span><br><span class="line">    (error)=&gt;&#123;</span><br><span class="line">        return Promise.reject(error);</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">//响应拦截</span><br><span class="line">http.interceptors.response.use(</span><br><span class="line">    (res)=&gt;&#123;</span><br><span class="line">        if(res.status === 200)&#123;</span><br><span class="line">            return res.data;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            return Promise.reject(res);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    (error)=&gt;&#123;</span><br><span class="line">        switch (error.response.status) &#123;</span><br><span class="line">            case 401:</span><br><span class="line">                break</span><br><span class="line">            case 403:</span><br><span class="line">                break</span><br><span class="line">            case 404:</span><br><span class="line">                break</span><br><span class="line">            case 500:</span><br><span class="line">                break</span><br><span class="line">            default:</span><br><span class="line">                console.log(&#x27;其他错误信息&#x27;)</span><br><span class="line">        &#125;</span><br><span class="line">        return Promise.reject(error);</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">export default http;</span><br></pre></td></tr></table></figure>
+        <h1 id="为什么使用路由懒加载？"><a href="#为什么使用路由懒加载？" class="headerlink" title="为什么使用路由懒加载？"></a>为什么使用路由懒加载？</h1><p>如果我们导航栏有100个组件，在我们打开页面的时候，这100个组件就会被加载，这样是十分低效的。因此我们要懒加载，使用到那个加载那个。</p>
+<h1 id="如何使用？"><a href="#如何使用？" class="headerlink" title="如何使用？"></a>如何使用？</h1><h2 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h2><h3 id="安装react-loadable"><a href="#安装react-loadable" class="headerlink" title="安装react-loadable"></a>安装react-loadable</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add react-loadable</span><br></pre></td></tr></table></figure>
 
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>今天学到了另外一个小知识点，可以在开发时对api统一管理，即把所有的api放在一个api.js文件里，然后导出，当需要使用时使用相关的api即可。</p>
+<h3 id="导入项目"><a href="#导入项目" class="headerlink" title="导入项目"></a>导入项目</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import Loadable from &#x27;react-loadable&#x27;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="组件懒加载-demo"><a href="#组件懒加载-demo" class="headerlink" title="组件懒加载 demo"></a>组件懒加载 demo</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 未加载出组件之前展示的loading</span><br><span class="line">function Loading()&#123;</span><br><span class="line">  return (&lt;h1&gt; Loading ... &lt;/h1&gt;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 懒加载GeneralForm组件</span><br><span class="line">const GeneralForm = Loadable(&#123;</span><br><span class="line">  loader:() =&gt; import(&#x27;./pages/Form/GeneralForm&#x27;),</span><br><span class="line">  loading: Loading</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h2><p>Lazy + Suspense</p>
+<h3 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123;lazy, Suspence&#125; from &#x27;react&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="懒加载组件"><a href="#懒加载组件" class="headerlink" title="懒加载组件"></a>懒加载组件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const Visualization = lazy(() =&gt; &#123;import(&#x27;./pages/Visualization&#x27;)&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Suspense-未加载出组件之前展示的loading"><a href="#Suspense-未加载出组件之前展示的loading" class="headerlink" title="Suspense 未加载出组件之前展示的loading"></a>Suspense 未加载出组件之前展示的loading</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Suspense fallback=&#123;&lt;div&gt;Loading...&lt;/div&gt;&#125;&gt;</span><br><span class="line">    &lt;Routes&gt;</span><br><span class="line">        &lt;Route&gt;&lt;/Route&gt;</span><br><span class="line">    &lt;/Routes&gt;</span><br><span class="line">&lt;/Suspense&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
 
     </div>
 
@@ -275,7 +272,6 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Axios/" rel="tag"># Axios</a>
               <a href="/tags/react/" rel="tag"># react</a>
           </div>
 
@@ -283,14 +279,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/06/17/2022%E4%B8%8A%E5%8D%8A%E5%B9%B4%E6%B5%81%E6%B0%B4%E8%B4%A6/" rel="prev" title="2022上半年流水账">
-                  <i class="fa fa-chevron-left"></i> 2022上半年流水账
+                <a href="/2022/06/22/Redux/" rel="prev" title="Redux">
+                  <i class="fa fa-chevron-left"></i> Redux
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/06/22/Redux/" rel="next" title="Redux">
-                  Redux <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
