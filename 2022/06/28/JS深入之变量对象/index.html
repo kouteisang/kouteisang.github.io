@@ -20,28 +20,31 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="路由懒加载">
+    <meta name="description" content="全局上下文与函数上下文">
 <meta property="og:type" content="article">
-<meta property="og:title" content="react路由懒加载">
-<meta property="og:url" content="http://example.com/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/index.html">
+<meta property="og:title" content="JS深入之变量对象">
+<meta property="og:url" content="http://example.com/2022/06/28/JS%E6%B7%B1%E5%85%A5%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AF%B9%E8%B1%A1/index.html">
 <meta property="og:site_name" content="Cheng Huang&#39;s Blog">
-<meta property="og:description" content="路由懒加载">
+<meta property="og:description" content="全局上下文与函数上下文">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-06-26T07:52:26.000Z">
-<meta property="article:modified_time" content="2022-06-26T09:07:54.265Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220628094935.png">
+<meta property="article:published_time" content="2022-06-28T07:37:40.000Z">
+<meta property="article:modified_time" content="2022-06-28T09:15:53.394Z">
 <meta property="article:author" content="Cheng Huang">
-<meta property="article:tag" content="react">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220628094935.png">
 
 
-<link rel="canonical" href="http://example.com/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/">
+<link rel="canonical" href="http://example.com/2022/06/28/JS%E6%B7%B1%E5%85%A5%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AF%B9%E8%B1%A1/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/","path":"2022/06/26/react路由懒加载/","title":"react路由懒加载"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/28/JS%E6%B7%B1%E5%85%A5%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AF%B9%E8%B1%A1/","path":"2022/06/28/JS深入之变量对象/","title":"JS深入之变量对象"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>react路由懒加载 | Cheng Huang's Blog</title>
+<title>JS深入之变量对象 | Cheng Huang's Blog</title>
   
 
 
@@ -116,7 +119,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">为什么使用路由懒加载？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">如何使用？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85react-loadable"><span class="nav-number">2.1.1.</span> <span class="nav-text">安装react-loadable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.1.2.</span> <span class="nav-text">导入项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E6%87%92%E5%8A%A0%E8%BD%BD-demo"><span class="nav-number">2.1.3.</span> <span class="nav-text">组件懒加载 demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5"><span class="nav-number">2.2.1.</span> <span class="nav-text">导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%87%92%E5%8A%A0%E8%BD%BD%E7%BB%84%E4%BB%B6"><span class="nav-number">2.2.2.</span> <span class="nav-text">懒加载组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Suspense-%E6%9C%AA%E5%8A%A0%E8%BD%BD%E5%87%BA%E7%BB%84%E4%BB%B6%E4%B9%8B%E5%89%8D%E5%B1%95%E7%A4%BA%E7%9A%84loading"><span class="nav-number">2.2.3.</span> <span class="nav-text">Suspense 未加载出组件之前展示的loading</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">1.</span> <span class="nav-text">全局上下文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">函数上下文</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -188,7 +191,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/28/JS%E6%B7%B1%E5%85%A5%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AF%B9%E8%B1%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -201,12 +204,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="react路由懒加载 | Cheng Huang's Blog">
-      <meta itemprop="description" content="路由懒加载">
+      <meta itemprop="name" content="JS深入之变量对象 | Cheng Huang's Blog">
+      <meta itemprop="description" content="全局上下文与函数上下文">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          react路由懒加载
+          JS深入之变量对象
         </h1>
 
         <div class="post-meta-container">
@@ -218,7 +221,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2022-06-26 09:52:26 / Modified: 11:07:54" itemprop="dateCreated datePublished" datetime="2022-06-26T09:52:26+02:00">2022-06-26</time>
+      <time title="Created: 2022-06-28 09:37:40 / Modified: 11:15:53" itemprop="dateCreated datePublished" datetime="2022-06-28T09:37:40+02:00">2022-06-28</time>
     </span>
 
   
@@ -230,15 +233,15 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/26/react路由懒加载/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2022/06/28/JS%E6%B7%B1%E5%85%A5%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AF%B9%E8%B1%A1/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/28/JS深入之变量对象/" itemprop="commentCount"></span>
     </a>
   </span>
   
   
 </div>
 
-            <div class="post-description">路由懒加载</div>
+            <div class="post-description">全局上下文与函数上下文</div>
         </div>
       </header>
 
@@ -246,24 +249,54 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="为什么使用路由懒加载？"><a href="#为什么使用路由懒加载？" class="headerlink" title="为什么使用路由懒加载？"></a>为什么使用路由懒加载？</h1><p>如果我们导航栏有100个组件，在我们打开页面的时候，这100个组件就会被加载，这样是十分低效的。因此我们要懒加载，使用到那个加载那个。</p>
-<h1 id="如何使用？"><a href="#如何使用？" class="headerlink" title="如何使用？"></a>如何使用？</h1><h2 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h2><h3 id="安装react-loadable"><a href="#安装react-loadable" class="headerlink" title="安装react-loadable"></a>安装react-loadable</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add react-loadable</span><br></pre></td></tr></table></figure>
+        <h1 id="全局上下文"><a href="#全局上下文" class="headerlink" title="全局上下文"></a>全局上下文</h1><ol>
+<li>可以通过this引用，在客户端JS中，全局对象就是window对象。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">console.log(this) // window</span><br></pre></td></tr></table></figure>
 
-<h3 id="导入项目"><a href="#导入项目" class="headerlink" title="导入项目"></a>导入项目</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import Loadable from &#x27;react-loadable&#x27;;</span><br></pre></td></tr></table></figure>
+<p>且window对象定义了一堆属性和方法。</p>
+<ol start="2">
+<li>全局对象是由Object构造函数实例化的一个对象</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">console.log(this instanceof Object) // true</span><br></pre></td></tr></table></figure>
 
-<h3 id="组件懒加载-demo"><a href="#组件懒加载-demo" class="headerlink" title="组件懒加载 demo"></a>组件懒加载 demo</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 未加载出组件之前展示的loading</span><br><span class="line">function Loading()&#123;</span><br><span class="line">  return (&lt;h1&gt; Loading ... &lt;/h1&gt;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 懒加载GeneralForm组件</span><br><span class="line">const GeneralForm = Loadable(&#123;</span><br><span class="line">  loader:() =&gt; import(&#x27;./pages/Form/GeneralForm&#x27;),</span><br><span class="line">  loading: Loading</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>作为全局变量的宿主</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var a = 1;</span><br><span class="line">console.log(this.a) // 1</span><br></pre></td></tr></table></figure>
 
-<h2 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h2><p>Lazy + Suspense</p>
-<h3 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import &#123;lazy, Suspence&#125; from &#x27;react&#x27;</span><br></pre></td></tr></table></figure>
+<p>这是因为在a是全局变量，该全局变量被当作window的一个属性。<br><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220628094935.png"></p>
+<h1 id="函数上下文"><a href="#函数上下文" class="headerlink" title="函数上下文"></a>函数上下文</h1><p>在了解函数上下文之前我们应该知道什么是变量对象(Variable Object)和活动对象(Activation Object)。</p>
+<p>其实变量对象(Variable Object)和活动对象(Activation Object)是同一个东西，只是存在于不同的生命周期中。在函数进入执行阶段之前，变量对象中的属性都不可以访问。进入执行阶段后，变量对象变成活动对象，里面的属性可以被访问了，然后执行代码。</p>
+<p>当一个执行上下文入栈时，它有两个生命周期，创建和执行阶段。</p>
+<ol>
+<li>创建阶段</li>
+</ol>
+<p>(1) 生成变量对象(Variable Object)</p>
+<p>(2) 建立作用域链(Scope chain)</p>
+<p>(3) 确定函数中this的指向</p>
+<ol start="2">
+<li>执行阶段</li>
+</ol>
+<p>(1) 变量赋值</p>
+<p>(2) 函数引用</p>
+<p>(3) 执行其他代码</p>
+<p>在函数上下文中，我们用活动对象(activation object, AO)来表示变量对象。活动对象是在进入函数上下文时刻被创建的，它通过函数的arguments属性初始化，arguments属性值是Argument对象。</p>
+<p>VO中包含函数的形参、函数声明、变量声明。</p>
+<p><font color='red'>举个例子</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function foo(a) &#123;</span><br><span class="line">  var b = 2;</span><br><span class="line">  function c() &#123;&#125;;</span><br><span class="line">  var d = function() &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  b = 3;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo(1);</span><br></pre></td></tr></table></figure>
 
-<h3 id="懒加载组件"><a href="#懒加载组件" class="headerlink" title="懒加载组件"></a>懒加载组件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const Visualization = lazy(() =&gt; &#123;import(&#x27;./pages/Visualization&#x27;)&#125;)</span><br></pre></td></tr></table></figure>
+<p>那么VO为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">VO = &#123;</span><br><span class="line">    a: 1,</span><br><span class="line">    b: undefined,</span><br><span class="line">    c: function()&#123;&#125;,</span><br><span class="line">    d: undefined</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="Suspense-未加载出组件之前展示的loading"><a href="#Suspense-未加载出组件之前展示的loading" class="headerlink" title="Suspense 未加载出组件之前展示的loading"></a>Suspense 未加载出组件之前展示的loading</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Suspense fallback=&#123;&lt;div&gt;Loading...&lt;/div&gt;&#125;&gt;</span><br><span class="line">    &lt;Routes&gt;</span><br><span class="line">        &lt;Route&gt;&lt;/Route&gt;</span><br><span class="line">    &lt;/Routes&gt;</span><br><span class="line">&lt;/Suspense&gt;</span><br></pre></td></tr></table></figure>
+<p>执行阶段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AO = &#123;</span><br><span class="line">    a: 1,</span><br><span class="line">    b: 3,</span><br><span class="line">    c: reference to function c() &#123;&#125;,</span><br><span class="line">    d: reference to FunctionExpression &quot;d&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p><font color="red">思考题</font></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">console.log(foo);</span><br><span class="line"></span><br><span class="line">function foo()&#123;</span><br><span class="line">    console.log(&quot;foo&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var foo = 1;</span><br></pre></td></tr></table></figure>
 
-
-
-
+<p>在进行变量和函数提升后变为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var foo;</span><br><span class="line">foo = function()&#123;</span><br><span class="line">    console.log(&quot;foo&quot;);</span><br><span class="line">&#125;</span><br><span class="line">console.log(foo) //输出函数</span><br><span class="line">foo = 1;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -272,20 +305,21 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/react/" rel="tag"># react</a>
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Interview/" rel="tag"># Interview</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/06/22/Redux/" rel="prev" title="Redux">
-                  <i class="fa fa-chevron-left"></i> Redux
+                <a href="/2022/06/27/JS%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E5%92%8C%E5%87%BD%E6%95%B0%E6%8F%90%E5%8D%87/" rel="prev" title="JS变量提升和函数提升">
+                  <i class="fa fa-chevron-left"></i> JS变量提升和函数提升
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/06/27/JS%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/" rel="next" title="JS原型和原型链">
-                  JS原型和原型链 <i class="fa fa-chevron-right"></i>
+                <a href="/2022/06/28/JS%E4%B8%AD%E7%9A%84call-apply%E5%92%8Cbind/" rel="next" title="JS中的call,apply和bind">
+                  JS中的call,apply和bind <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

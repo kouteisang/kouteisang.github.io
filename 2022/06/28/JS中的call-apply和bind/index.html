@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="JS中call，apply和bind函数的区别">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS中的call,apply和bind">
+<meta property="og:url" content="http://example.com/2022/06/28/JS%E4%B8%AD%E7%9A%84call-apply%E5%92%8Cbind/index.html">
+<meta property="og:site_name" content="Cheng Huang&#39;s Blog">
+<meta property="og:description" content="JS中call，apply和bind函数的区别">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220628151730.png">
+<meta property="article:published_time" content="2022-06-28T12:24:11.000Z">
+<meta property="article:modified_time" content="2022-06-28T14:27:44.747Z">
+<meta property="article:author" content="Cheng Huang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Interview">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220628151730.png">
+
+
+<link rel="canonical" href="http://example.com/2022/06/28/JS%E4%B8%AD%E7%9A%84call-apply%E5%92%8Cbind/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/28/JS%E4%B8%AD%E7%9A%84call-apply%E5%92%8Cbind/","path":"2022/06/28/JS中的call-apply和bind/","title":"JS中的call,apply和bind"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JS中的call,apply和bind | Cheng Huang's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Cheng Huang's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#apply%E5%92%8Ccall%E7%9A%84%E7%9B%B8%E5%90%8C%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">apply和call的相同点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#apple%E5%92%8Ccall%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.</span> <span class="nav-text">apple和call的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#call%E5%92%8Capply%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">call和apply的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%B8%80"><span class="nav-number">3.1.</span> <span class="nav-text">应用一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%BA%8C-%E6%B1%82%E6%9C%80%E5%80%BC"><span class="nav-number">3.2.</span> <span class="nav-text">应用二 求最值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%BA%8C-%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">3.3.</span> <span class="nav-text">应用二 面试题 :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%B8%89%EF%BC%9A"><span class="nav-number">3.4.</span> <span class="nav-text">应用三：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bind"><span class="nav-number">4.</span> <span class="nav-text">bind</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8Fdemo"><span class="nav-number">4.1.</span> <span class="nav-text">小demo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#reference"><span class="nav-number">5.1.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Cheng Huang</p>
+  <div class="site-description" itemprop="description">记录生活 留下感动 | Leave an impression in my life by recording routines</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kouteisang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kouteisang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:huangchengadam@gmail.com" title="E-Mail → mailto:huangchengadam@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/iamkoutei3n" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;iamkoutei3n" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/kouteisang/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;kouteisang&#x2F;" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/28/JS%E4%B8%AD%E7%9A%84call-apply%E5%92%8Cbind/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Cheng Huang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cheng Huang's Blog">
+      <meta itemprop="description" content="记录生活 留下感动 | Leave an impression in my life by recording routines">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JS中的call,apply和bind | Cheng Huang's Blog">
+      <meta itemprop="description" content="JS中call，apply和bind函数的区别">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JS中的call,apply和bind
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-06-28 14:24:11 / Modified: 16:27:44" itemprop="dateCreated datePublished" datetime="2022-06-28T14:24:11+02:00">2022-06-28</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/06/28/JS%E4%B8%AD%E7%9A%84call-apply%E5%92%8Cbind/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/28/JS中的call-apply和bind/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">JS中call，apply和bind函数的区别</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>JavaScript的一大特点是函数存在“定义时上下文”和“运行时上下文”。</p>
+<p>apply，call函数的作用就是为了改变函数运行时的上下文，换句话说就是为了改变函数体内部this的指向。</p>
+<h1 id="apply和call的相同点"><a href="#apply和call的相同点" class="headerlink" title="apply和call的相同点"></a>apply和call的相同点</h1><ol>
+<li>apply和call的相同点都是改变运行时函数的this指向。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function Person()&#123;</span><br><span class="line">    this.name = &quot;Cheng&quot;;</span><br><span class="line">    this.sayName = function () &#123;</span><br><span class="line">        console.log(&quot;My name is&quot;, this.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let cheng = new Person();</span><br><span class="line">cheng.sayName(); //Cheng 说明此时this指向为Person</span><br><span class="line"></span><br><span class="line">let Sister = &#123;</span><br><span class="line">    name:&quot;Jing&quot;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">cheng.sayName.call(Sister); //Jing 说明此时this指向为Sister</span><br><span class="line">cheng.sayName.apply(Sister); // Jing 说明此时this指向为Sister</span><br></pre></td></tr></table></figure>
+
+<h1 id="apple和call的区别"><a href="#apple和call的区别" class="headerlink" title="apple和call的区别"></a>apple和call的区别</h1><ol start="2">
+<li>apply函数和call函数接受的参数不同。call函数是需要把参数按照顺序传递进去，而apply函数则是把参数放在数组里再传进去。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">function Person()&#123;</span><br><span class="line">    this.name = &quot;Cheng&quot;;</span><br><span class="line">    this.sayName = function (city, age) &#123;</span><br><span class="line">        console.log(&quot;My name is&quot;, this.name, &quot; I live in &quot;, city, &quot; I am &quot; + age + &quot; years old&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">let cheng = &#123;</span><br><span class="line">    name:&quot;Cheng&quot;,</span><br><span class="line">    city:&quot;Aarhus&quot;,</span><br><span class="line">    age:&quot;22&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let Sister = &#123;</span><br><span class="line">    name:&quot;Jing&quot;,</span><br><span class="line">    city:&quot;Jinan&quot;,</span><br><span class="line">    age:&quot;12&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let person = new Person();</span><br><span class="line"></span><br><span class="line">person.sayName(cheng.city, cheng.age) // My name is Cheng  I live in  Aarhus  I am 22 years old</span><br><span class="line">person.sayName.call(Sister, Sister.city, Sister.age); // My name is Jing  I live in  Jinan  I am 12 years old</span><br><span class="line">person.sayName.apply(Sister, [Sister.city, Sister.age]); // My name is Jing  I live in  Jinan  I am 12 years old</span><br></pre></td></tr></table></figure>
+
+<h1 id="call和apply的应用"><a href="#call和apply的应用" class="headerlink" title="call和apply的应用"></a>call和apply的应用</h1><h2 id="应用一"><a href="#应用一" class="headerlink" title="应用一"></a>应用一</h2><p>类数组可以通过数组的方式进行变量获取，也可以通过.length方法获得类数组的长度，但是类数组不能做到的是无法进行使用数组的api，例如类数组不能使用push方法等。</p>
+<p>一个类数组如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var arrLike = &#123;</span><br><span class="line">    0: &#x27;name&#x27;,</span><br><span class="line">    1: &#x27;age&#x27;,</span><br><span class="line">    2: &#x27;job&#x27;,</span><br><span class="line">    length: 3</span><br><span class="line">&#125;</span><br><span class="line">console.log(arrLike[0]) // name</span><br><span class="line">console.log(arrLike.length) // 3</span><br></pre></td></tr></table></figure>
+
+<p>因此为了使用数组的相关api，我们可以做的是使用call方法或apply方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var arrLike = &#123;</span><br><span class="line">    0: &#x27;name&#x27;,</span><br><span class="line">    1: &#x27;age&#x27;,</span><br><span class="line">    2: &#x27;job&#x27;,</span><br><span class="line">    length: 3</span><br><span class="line">&#125;</span><br><span class="line">console.log(arrLike[0]) // name</span><br><span class="line">console.log(arrLike.length) // 3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Array.prototype.push.call(arrLike, &quot;living&quot;); // 通过call方法为arrLike这个类数组添加&quot;living&quot;</span><br><span class="line">console.log(arrLike[3]) // living</span><br><span class="line">console.log(arrLike.length) // 4</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220628151730.png"></p>
+<h2 id="应用二-求最值"><a href="#应用二-求最值" class="headerlink" title="应用二 求最值"></a>应用二 求最值</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let a = [1,2,3];</span><br><span class="line">let res = Math.max.apply(Math, a);</span><br><span class="line">console.log(res) // 3</span><br></pre></td></tr></table></figure>
+
+<h2 id="应用二-面试题"><a href="#应用二-面试题" class="headerlink" title="应用二 面试题 :"></a>应用二 面试题 :</h2><p>定义一个log方法 让其可以代理console.log方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function log() &#123;</span><br><span class="line">    console.log(arguments) //[Arguments] &#123; &#x27;0&#x27;: 1, &#x27;1&#x27;: 2, &#x27;2&#x27;: 3 &#125;</span><br><span class="line">    console.log.apply(console, arguments); // 1 2 3</span><br><span class="line">&#125;</span><br><span class="line">log(1, 2, 3)</span><br></pre></td></tr></table></figure>
+
+<p>接下来给log函数的打印定义一个前缀。例如(“hello world”)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function log() &#123;</span><br><span class="line">    Array.prototype.unshift.call(arguments, &quot;(hello world)&quot;)</span><br><span class="line">    console.log.apply(console, arguments);</span><br><span class="line">&#125;</span><br><span class="line">log(1, 2, 3) //(hello world) 1 2 3</span><br></pre></td></tr></table></figure>
+
+<h2 id="应用三："><a href="#应用三：" class="headerlink" title="应用三："></a>应用三：</h2><p>类数组转换为数组</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let arr = Array.propotype.slice.call(arrayLike); //因为slice的返回值是一个数组</span><br></pre></td></tr></table></figure>
+
+<h1 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h1><p>bind也是用来改变this指向的。</p>
+<p>在讨论bind()之前，我们先讨论一道题，下方这个代码会打印hello在页面吗？答案就是不会！肯定不会！不会打印的原因是因为this的指向发生了改变，altwrite这个方法的调用方是window，但是window并没有这个函数。因此会报错Uncaught TypeError: Illegal invocation。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var altwrite = document.write;</span><br><span class="line">altwrite(&quot;hello&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>解决方法使用改变其this指向。我们可以使用call，apply。这里我们使用bind方法。bind方法会返回给我们一个函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var altwrite = document.write;</span><br><span class="line"></span><br><span class="line">// 使用call</span><br><span class="line">altwrite.call(document,&quot;hello world&quot;);</span><br><span class="line"></span><br><span class="line">//使用bind</span><br><span class="line">let funcAltWrite = altwrite.bind(document); // bind返回给我们一个函数</span><br><span class="line">funcAltWrite(&quot;Hello World&quot;); // 调用这个函数</span><br></pre></td></tr></table></figure>
+
+<h2 id="小demo"><a href="#小demo" class="headerlink" title="小demo"></a>小demo</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var bar = function()&#123;</span><br><span class="line">    console.log(this.x);</span><br><span class="line">&#125;</span><br><span class="line">var foo = &#123;</span><br><span class="line">    x:3</span><br><span class="line">&#125;</span><br><span class="line">bar(); // undefined</span><br><span class="line">var func = bar.bind(foo);</span><br><span class="line">func(); // 3</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>apply 、 call 、bind 三者都是用来改变函数的this对象的指向的；</p>
+<p>apply 、 call 、bind 三者第一个参数都是this要指向的对象，也就是想指定的上下文；</p>
+<p>apply 、 call 、bind 三者都可以利用后续参数传参；</p>
+<p>bind 是返回对应函数，便于稍后调用；apply 、call 则是立即调用 。</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href = "https://segmentfault.com/a/1190000018270750">JS中的call、apply、bind方法详解</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Interview/" rel="tag"># Interview</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/06/28/JS%E6%B7%B1%E5%85%A5%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AF%B9%E8%B1%A1/" rel="prev" title="JS深入之变量对象">
+                  <i class="fa fa-chevron-left"></i> JS深入之变量对象
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cheng Huang | 黄程</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"iamkoutei","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
