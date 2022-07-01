@@ -20,34 +20,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Prototype, proto, constructor">
+    <meta name="description" content="详细解释JavaScript中new的实现">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS原型和原型链">
-<meta property="og:url" content="http://example.com/2022/06/27/JS%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/index.html">
+<meta property="og:title" content="JS之new的实现">
+<meta property="og:url" content="http://example.com/2022/07/01/JS%E4%B9%8Bnew%E7%9A%84%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="Cheng Huang&#39;s Blog">
-<meta property="og:description" content="Prototype, proto, constructor">
+<meta property="og:description" content="详细解释JavaScript中new的实现">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627161022.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627161611.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627162015.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627162301.png">
-<meta property="article:published_time" content="2022-06-27T13:59:03.000Z">
-<meta property="article:modified_time" content="2022-06-27T14:27:46.317Z">
+<meta property="article:published_time" content="2022-07-01T14:20:42.000Z">
+<meta property="article:modified_time" content="2022-07-01T15:19:00.360Z">
 <meta property="article:author" content="Cheng Huang">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627161022.png">
 
 
-<link rel="canonical" href="http://example.com/2022/06/27/JS%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/">
+<link rel="canonical" href="http://example.com/2022/07/01/JS%E4%B9%8Bnew%E7%9A%84%E5%AE%9E%E7%8E%B0/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/27/JS%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/","path":"2022/06/27/JS原型和原型链/","title":"JS原型和原型链"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/07/01/JS%E4%B9%8Bnew%E7%9A%84%E5%AE%9E%E7%8E%B0/","path":"2022/07/01/JS之new的实现/","title":"JS之new的实现"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>JS原型和原型链 | Cheng Huang's Blog</title>
+<title>JS之new的实现 | Cheng Huang's Blog</title>
   
 
 
@@ -122,7 +117,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Prototype-proto-constructor"><span class="nav-number">1.</span> <span class="nav-text">Prototype, proto, constructor</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8E%9F%E5%9E%8B%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">什么是原型？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reference"><span class="nav-number">1.2.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%B8%AADemo"><span class="nav-number">1.</span> <span class="nav-text">一个Demo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80"><span class="nav-number">2.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="nav-number">3.</span> <span class="nav-text">方法二</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -194,7 +189,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/27/JS%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/01/JS%E4%B9%8Bnew%E7%9A%84%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -207,12 +202,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="JS原型和原型链 | Cheng Huang's Blog">
-      <meta itemprop="description" content="Prototype, proto, constructor">
+      <meta itemprop="name" content="JS之new的实现 | Cheng Huang's Blog">
+      <meta itemprop="description" content="详细解释JavaScript中new的实现">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          JS原型和原型链
+          JS之new的实现
         </h1>
 
         <div class="post-meta-container">
@@ -224,7 +219,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2022-06-27 15:59:03 / Modified: 16:27:46" itemprop="dateCreated datePublished" datetime="2022-06-27T15:59:03+02:00">2022-06-27</time>
+      <time title="Created: 2022-07-01 16:20:42 / Modified: 17:19:00" itemprop="dateCreated datePublished" datetime="2022-07-01T16:20:42+02:00">2022-07-01</time>
     </span>
 
   
@@ -236,15 +231,15 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2022/06/27/JS%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/27/JS原型和原型链/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2022/07/01/JS%E4%B9%8Bnew%E7%9A%84%E5%AE%9E%E7%8E%B0/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/01/JS之new的实现/" itemprop="commentCount"></span>
     </a>
   </span>
   
   
 </div>
 
-            <div class="post-description">Prototype, proto, constructor</div>
+            <div class="post-description">详细解释JavaScript中new的实现</div>
         </div>
       </header>
 
@@ -252,37 +247,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="Prototype-proto-constructor"><a href="#Prototype-proto-constructor" class="headerlink" title="Prototype, proto, constructor"></a>Prototype, proto, constructor</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function Person()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let person = new Person();</span><br><span class="line">person.name = &quot;Cheng Huang&quot;;</span><br><span class="line">console.log(person.name) // Cheng Huang</span><br></pre></td></tr></table></figure>
-<p>这里我们创建person对象，并为person对象添加name属性。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Person.prototype.name = &quot;Koutei&quot;;</span><br><span class="line">let person1 = new Person();</span><br><span class="line">let person2 = new Person();</span><br><span class="line">console.log(person1.name); // Koutei</span><br><span class="line">console.log(person2.name); // Koutei</span><br></pre></td></tr></table></figure>
-<p>此时我们又创建person1和person2两个对象，这两个对象并没有name属性，但是却可以输出Koutei是因为原型。</p>
-<h2 id="什么是原型？"><a href="#什么是原型？" class="headerlink" title="什么是原型？"></a>什么是原型？</h2><p>Person是一个构造函数，<strong>Person.prototype则指向它的原型对象</strong>。</p>
-<p>当一个对象自身没有该属性时，它会向自身的原型对象去寻找该属性。</p>
-<p>用一张图来形容Person构造函数和其原型对象的关系为</p>
-<p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627161022.png"></p>
-<p>因为我们通过</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person.prototype.name = &quot;Koutei&quot;;</span><br></pre></td></tr></table></figure>
-<p>为Person的原型对象添加了name属性，因此person1和person2会顺着原型链去寻找name属性。</p>
-<p><strong>只有构造函数才有prototype属性</strong>所以当构造函数想要访问原型对象是通过上述代码访问。</p>
-<p>那么一个对象如何访问其原型对象呢？</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// person 为 Person类的实例对象</span><br><span class="line">console.log(person.__proto__ === Person.prototype) // true</span><br></pre></td></tr></table></figure>
+        <h1 id="一个Demo"><a href="#一个Demo" class="headerlink" title="一个Demo"></a>一个Demo</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function Person(name, age)&#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">    this.age = age;</span><br><span class="line">    this.hobby = &quot;sleep&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person.prototype.sayYourName = function ()&#123;</span><br><span class="line">    console.log(&quot;I am&quot;, this.name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let cheng = new Person(&quot;Cheng Huang&quot;, 22);</span><br><span class="line">console.log(cheng.name); // Cheng Huang</span><br><span class="line">console.log(cheng.age); // 22</span><br><span class="line">console.log(cheng.hobby); // sleep</span><br><span class="line">cheng.sayYourName(); // I am Cheng Huang</span><br></pre></td></tr></table></figure>
 
-<p>因此我们得出了以下关系图</p>
-<p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627161611.png"></p>
-<p>此外，Person的原型对象身上还带着一个constructor属性，该constructor属性指向了Person构造函数本身。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">console.log(Person === Person.prototype.constructor) // true</span><br></pre></td></tr></table></figure>
+<p>上面的demo很显而易见，那么我们如何不使用new关键字来创建cheng这个对象呢，有两种方法。</p>
+<h1 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function objectFactory() &#123;</span><br><span class="line">    let obj = new Object(); //这个obj是从Object.prototype上克隆一个对象</span><br><span class="line">    let constructor = Array.prototype.shift.call(arguments);</span><br><span class="line">    obj.__proto__ = constructor.prototype;</span><br><span class="line">    let ret = constructor.apply(obj, arguments);</span><br><span class="line">    return typeof ret === &quot;object&quot; ? ret : obj; //当返回值是一个对象时我们返回一个对象，</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let personDemo1 = objectFactory(Person, &quot;Cheng Huang&quot;, 22);</span><br><span class="line">console.log(personDemo1.name); // Cheng Huang</span><br><span class="line">console.log(personDemo1.age); // 22</span><br><span class="line">console.log(personDemo1.hobby); // sleep</span><br><span class="line">personDemo1.sayYourName(); // I am Cheng Huang</span><br></pre></td></tr></table></figure>
 
-<p>所以我们可以再更新其关系图为</p>
-<p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627162015.png"></p>
-<p>一个新的疑问是Person的原型对象的原型是什么？即</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person.prototype.__proto__ = ?</span><br></pre></td></tr></table></figure>
-<p>答案是：Person的原型对象的原型为Object.prototype</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sole.log(Person.prototype.__proto__ === Object.prototype) //true</span><br></pre></td></tr></table></figure>
 
-<p>所以我们的关系图可以更新为下<br><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220627162301.png"></p>
-<p>而Object.prototype的原型为null。</p>
-<p>因此我们在输出一个对象的属性时，我们首先会判断其自身是否有这个属性，若其自身有这个属性则输出，否则就顺着原型链去寻找，若可以找到则返回，否则返回undefined。</p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a target="_blank" rel="noopener" href='https://github.com/mqyqingfeng/Blog/issues/2'>JavaScript深入之从原型到原型链</a></p>
+
+<h1 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h1><p>我们注意到在方法一中我们使用了new关键字，那么如何完全不使用这个关键字呢。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">function Person(name, age)&#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">    this.age = age;</span><br><span class="line">    this.hobby = &quot;sleep&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person.prototype.sayYourName = function ()&#123;</span><br><span class="line">    console.log(&quot;I am&quot;, this.name);</span><br><span class="line">    console.log(this);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function objectFactory() &#123;</span><br><span class="line">    let constructor = Array.prototype.shift.call(arguments);</span><br><span class="line">    let obj = Object.create(constructor.prototype) // 这个obj是从Person.prototype上克隆一个对象</span><br><span class="line">    let ret = constructor.apply(obj, arguments);</span><br><span class="line">    return typeof ret === &quot;object&quot; ? ret : obj; //当返回值是一个对象时我们返回一个对象，</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let personDemo2 = objectFactory(Person, &quot;Cheng Huang&quot;, 22);</span><br><span class="line">console.log(personDemo2.name); // Cheng Huang</span><br><span class="line">console.log(personDemo2.age); // 22</span><br><span class="line">console.log(personDemo2.hobby); // sleep</span><br><span class="line">personDemo2.sayYourName(); // I am Cheng Huang</span><br></pre></td></tr></table></figure>
+
+<p><font color='red'>注意：使用Object.create(null)相当于自己创建了一个prototype为null的’CustomObject’,它不具备内置Object的一些特性,所以Object.create(null)创建的对象不支持原型特性, 自然也无法根据原型链查找属性&#x2F;方法</font></p>
 
     </div>
 
@@ -300,14 +275,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/06/26/react%E8%B7%AF%E7%94%B1%E6%87%92%E5%8A%A0%E8%BD%BD/" rel="prev" title="react路由懒加载">
-                  <i class="fa fa-chevron-left"></i> react路由懒加载
+                <a href="/2022/06/30/JS%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/" rel="prev" title="JS中的闭包">
+                  <i class="fa fa-chevron-left"></i> JS中的闭包
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/06/27/JS%E9%9D%99%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F/" rel="next" title="JS静态作用域">
-                  JS静态作用域 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
