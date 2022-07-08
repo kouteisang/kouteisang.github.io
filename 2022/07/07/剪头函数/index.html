@@ -28,7 +28,7 @@
 <meta property="og:description" content="箭头函数详解">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-07T13:58:01.000Z">
-<meta property="article:modified_time" content="2022-07-07T14:21:31.818Z">
+<meta property="article:modified_time" content="2022-07-08T10:00:03.409Z">
 <meta property="article:author" content="Cheng Huang">
 <meta property="article:tag" content="Interview">
 <meta property="article:tag" content="ES6">
@@ -129,7 +129,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -216,9 +216,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-07-07 15:58:01 / Modified: 16:21:31" itemprop="dateCreated datePublished" datetime="2022-07-07T15:58:01+02:00">2022-07-07</time>
+      <time title="Created: 2022-07-07 15:58:01" itemprop="dateCreated datePublished" datetime="2022-07-07T15:58:01+02:00">2022-07-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-08 12:00:03" itemprop="dateModified" datetime="2022-07-08T12:00:03+02:00">2022-07-08</time>
     </span>
 
   
@@ -247,8 +253,17 @@
     
     <div class="post-body" itemprop="articleBody">
         <ol>
-<li><p>箭头函数没有this，所以需要通过查找作用域链来确定this</p>
-</li>
+<li>箭头函数没有this，所以需要通过查找作用域链来确定this</li>
+</ol>
+<p>e.g.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">作者：四季奶青大杯正常糖</span><br><span class="line">链接：https://www.nowcoder.com/discuss/783864?source_id=discuss_experience_nctrack&amp;channel=-1</span><br><span class="line">来源：牛客网</span><br><span class="line"></span><br><span class="line">var name = &#x27;name&#x27;;</span><br><span class="line">var A = &#123;</span><br><span class="line">  name: &#x27;A&#x27;,</span><br><span class="line">  sayHello: function() &#123;</span><br><span class="line">      let s = () =&gt; console.log(this.name);</span><br><span class="line">      return s;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">let sayHello = A.sayHello();</span><br><span class="line">sayHello(); // 输出 A</span><br><span class="line">var B = &#123;</span><br><span class="line">  name: &#x27;B&#x27;</span><br><span class="line">&#125;;</span><br><span class="line">sayHello.call(B); // 输出 A</span><br><span class="line"></span><br><span class="line">之所以两个都输出A是因为箭头函数没有自己的this，需要从外层作用域sayHello()function中寻找this。由于A.sayHello()所以其外层调用域中的this指向A，所以箭头函数s的指向也是A，所以输出&#x27;A&#x27;。</span><br><span class="line"></span><br><span class="line">那么为什么call之后还是输出A呢，那是因为箭头函数没有自己的this所以call，apply，bind等方法对其根本没有任何作用。他只会寻找自己父级元素的this。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var A = &#123;</span><br><span class="line">    name: &#x27;A&#x27;,</span><br><span class="line">    sayHello: function()&#123;</span><br><span class="line">        var s = () =&gt; console.log(this.name)</span><br><span class="line">        return s//返回箭头函数s</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var B = &#123;</span><br><span class="line">    name: &#x27;B&#x27;</span><br><span class="line">&#125;</span><br><span class="line">A.sayHello.call(B)(); // B</span><br><span class="line"></span><br><span class="line">这是因为我们改变了A中sayHello的this指向，因此这个箭头函数的this指向B。</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">var A = &#123;</span><br><span class="line">    name: &#x27;A&#x27;,</span><br><span class="line">    sayHello: function()&#123;</span><br><span class="line">        var s = function()&#123; console.log(this.name)&#125;</span><br><span class="line">        return s//返回箭头函数s</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var B = &#123;</span><br><span class="line">    name: &#x27;B&#x27;</span><br><span class="line">&#125;</span><br><span class="line">let s = A.sayHello();</span><br><span class="line">s() //undefined</span><br><span class="line"></span><br><span class="line">如果我们改成了普通的函数，其调用者为window，由于window没有自己的name，所以输出undefined。</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
 <li><p>箭头函数没有自己的arguments对象</p>
 </li>
 <li><p>箭头函数不能通过new关键字调用，</p>
@@ -289,6 +304,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2022/07/08/React-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="next" title="React 性能优化">
+                  React 性能优化 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
