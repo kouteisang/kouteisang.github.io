@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文详细介绍JS中的防抖与节流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS防抖&amp;节流">
+<meta property="og:url" content="http://example.com/2022/07/09/JS%E9%98%B2%E6%8A%96-%E8%8A%82%E6%B5%81/index.html">
+<meta property="og:site_name" content="Cheng Huang&#39;s Blog">
+<meta property="og:description" content="本文详细介绍JS中的防抖与节流">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-09T08:35:11.000Z">
+<meta property="article:modified_time" content="2022-07-09T12:44:17.269Z">
+<meta property="article:author" content="Cheng Huang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Interview">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/07/09/JS%E9%98%B2%E6%8A%96-%E8%8A%82%E6%B5%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/07/09/JS%E9%98%B2%E6%8A%96-%E8%8A%82%E6%B5%81/","path":"2022/07/09/JS防抖-节流/","title":"JS防抖&节流"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JS防抖&节流 | Cheng Huang's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Cheng Huang's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%B2%E6%8A%96-amp-%E8%8A%82%E6%B5%81"><span class="nav-number">1.</span> <span class="nav-text">什么是防抖&amp;节流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B2%E6%8A%96-debounce"><span class="nav-number">2.</span> <span class="nav-text">防抖(debounce)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E6%8A%96%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">防抖函数实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8A%82%E6%B5%81"><span class="nav-number">3.</span> <span class="nav-text">节流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E6%B5%81%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.1.</span> <span class="nav-text">节流函数的实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E5%90%8C%E6%AF%94%E8%BE%83"><span class="nav-number">4.</span> <span class="nav-text">异同比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">5.</span> <span class="nav-text">使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E6%8A%96"><span class="nav-number">5.1.</span> <span class="nav-text">防抖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E6%B5%81%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">5.2.</span> <span class="nav-text">节流的使用场景</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Cheng Huang</p>
+  <div class="site-description" itemprop="description">记录生活 留下感动 | Leave an impression in my life by recording routines</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kouteisang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kouteisang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:huangchengadam@gmail.com" title="E-Mail → mailto:huangchengadam@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/iamkoutei3n" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;iamkoutei3n" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/kouteisang/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;kouteisang&#x2F;" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/09/JS%E9%98%B2%E6%8A%96-%E8%8A%82%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Cheng Huang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cheng Huang's Blog">
+      <meta itemprop="description" content="记录生活 留下感动 | Leave an impression in my life by recording routines">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JS防抖&节流 | Cheng Huang's Blog">
+      <meta itemprop="description" content="本文详细介绍JS中的防抖与节流">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JS防抖&节流
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-07-09 10:35:11 / Modified: 14:44:17" itemprop="dateCreated datePublished" datetime="2022-07-09T10:35:11+02:00">2022-07-09</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/07/09/JS%E9%98%B2%E6%8A%96-%E8%8A%82%E6%B5%81/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/09/JS防抖-节流/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">本文详细介绍JS中的防抖与节流</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="什么是防抖-amp-节流"><a href="#什么是防抖-amp-节流" class="headerlink" title="什么是防抖&amp;节流"></a>什么是防抖&amp;节流</h1><p>防抖和节流是JS中常见的性能优化手段，当我们执行一些事件，比如浏览器的resize，scroll; 鼠标的mousemove, mouseover, input输入框的keypress时。如果我们一直不断的调用绑定在事件上的callback函数，就会极大的浪费性能。严重时造成页面的卡顿。所以为了优化性能，我们需要对这类事件进行调用次数的限制。</p>
+<h1 id="防抖-debounce"><a href="#防抖-debounce" class="headerlink" title="防抖(debounce)"></a>防抖(debounce)</h1><p>防抖 : 触发事件一段时间后才执行函数，如果在这段时间内再次触发，则会重新计时。</p>
+<p>Debouncing is a programming practice used to ensure that time-consuming tasks do not fire so often, that it stalls the performance of the web page. In other words, it limits the rate at which a function gets invoked.</p>
+<p>setTimeout会返回一个timeoutID, 通过clearTimeout清楚指定ID的定时器。</p>
+<h2 id="防抖函数实现"><a href="#防抖函数实现" class="headerlink" title="防抖函数实现"></a>防抖函数实现</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// 箭头函数 是 函数定义时的this 而不是其使用时的this</span><br><span class="line"></span><br><span class="line">function testDebounce()&#123;</span><br><span class="line">    console.log(&quot;test&quot;);</span><br><span class="line">    return 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function debounce(fn, delay = 1000, immediate)&#123;</span><br><span class="line">    let timer = null;</span><br><span class="line">    let result;</span><br><span class="line">    return function()&#123; // 因为这个函数由document所调用</span><br><span class="line">        let args = arguments;</span><br><span class="line">        let context = this;</span><br><span class="line">        if(timer !== null) clearTimeout(timer);</span><br><span class="line">        if(immediate)&#123;</span><br><span class="line">            let callNow = !timer;</span><br><span class="line">            timer = setTimeout(()=&gt;&#123;</span><br><span class="line">                timer = null;</span><br><span class="line">            &#125;, delay)</span><br><span class="line">            if(callNow) result = fn.apply(context, args)</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            // 这里setTimeout使用箭头函数，其好处是箭头函数没有自己的this，因此可以从外界获得this，其外界的this刚好为document</span><br><span class="line">            timer = setTimeout(()=&gt;&#123;</span><br><span class="line">                fn(args)</span><br><span class="line">            &#125;, delay)</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 防抖1s后</span><br><span class="line">// immediate 是否立即执行</span><br><span class="line">document.onmousemove = debounce(testDebounce, 1000,false);</span><br></pre></td></tr></table></figure>
+
+<h1 id="节流"><a href="#节流" class="headerlink" title="节流"></a>节流</h1><p>节流：如果猊持续触发事件，每隔一段时间内，只执行一次函数。</p>
+<h2 id="节流函数的实现"><a href="#节流函数的实现" class="headerlink" title="节流函数的实现"></a>节流函数的实现</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function testThrottle()&#123;</span><br><span class="line">    console.log(arguments)</span><br><span class="line">    console.log(&quot;test throttle&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function throttle(fn, delay = 1000) &#123;</span><br><span class="line">    let timer = null;</span><br><span class="line">    return function () &#123;</span><br><span class="line">        if(timer !== null) return ;</span><br><span class="line">        let args = arguments</span><br><span class="line">        timer = setTimeout( () =&gt; &#123;</span><br><span class="line">            console.log(this)</span><br><span class="line">            fn(args);</span><br><span class="line">            timer = null;</span><br><span class="line">        &#125;, delay);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">document.onmousemove = throttle(testThrottle);</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="异同比较"><a href="#异同比较" class="headerlink" title="异同比较"></a>异同比较</h1><p>相同点</p>
+<ol>
+<li><p>目的都是降低回调的执行频率，节省资源</p>
+</li>
+<li><p>都可以使用setTimeout进行实现</p>
+</li>
+</ol>
+<p>不同点</p>
+<ol>
+<li>防抖关注在一定时间内连续触发的事件，只在最后一次执行。节流则侧重于一段时间内只执行一次。</li>
+</ol>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><h2 id="防抖"><a href="#防抖" class="headerlink" title="防抖"></a>防抖</h2><ol>
+<li>搜索框搜索输入，在最后一次输入完成后，再次发送请求。</li>
+<li>手机号邮箱的输入验证。</li>
+<li>窗口大小的调整，在调整完成后计算窗口的大小，防止重复渲染</li>
+</ol>
+<h2 id="节流的使用场景"><a href="#节流的使用场景" class="headerlink" title="节流的使用场景"></a>节流的使用场景</h2><ol>
+<li>表单的多次点击提交</li>
+<li>滚动加载，加载更多的操作。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Interview/" rel="tag"># Interview</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/07/08/JS%E4%B9%8B%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/" rel="prev" title="JS之事件循环机制">
+                  <i class="fa fa-chevron-left"></i> JS之事件循环机制
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/07/09/react%E5%8E%9F%E7%90%86/" rel="next" title="react原理">
+                  react原理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cheng Huang | 黄程</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"iamkoutei","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="react中的fiber">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react原理">
+<meta property="og:url" content="http://example.com/2022/07/09/react%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Cheng Huang&#39;s Blog">
+<meta property="og:description" content="react中的fiber">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220712145801.png">
+<meta property="article:published_time" content="2022-07-09T13:37:35.000Z">
+<meta property="article:modified_time" content="2022-07-12T14:51:25.306Z">
+<meta property="article:author" content="Cheng Huang">
+<meta property="article:tag" content="react">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220712145801.png">
+
+
+<link rel="canonical" href="http://example.com/2022/07/09/react%E5%8E%9F%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/07/09/react%E5%8E%9F%E7%90%86/","path":"2022/07/09/react原理/","title":"react原理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>react原理 | Cheng Huang's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Cheng Huang's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9Fdom"><span class="nav-number">1.</span> <span class="nav-text">虚拟dom</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%99%9A%E6%8B%9Fdom"><span class="nav-number">1.1.</span> <span class="nav-text">什么是虚拟dom</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%B0%86JSX%E8%BD%AC%E6%8D%A2%E6%88%90%E8%99%9A%E6%8B%9Fdom"><span class="nav-number">1.2.</span> <span class="nav-text">如何将JSX转换成虚拟dom</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#react-diffing%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">react diffing算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8index%E4%BD%9C%E4%B8%BAkey%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.</span> <span class="nav-text">用index作为key可能会引发的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Fiber"><span class="nav-number">1.5.</span> <span class="nav-text">React Fiber</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fiber%E4%BD%9C%E7%94%A8"><span class="nav-number">1.5.1.</span> <span class="nav-text">Fiber作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0Fiber"><span class="nav-number">1.5.2.</span> <span class="nav-text">为什么会出现Fiber</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFFiber%EF%BC%9F"><span class="nav-number">1.5.3.</span> <span class="nav-text">什么是Fiber？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fiber%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7"><span class="nav-number">1.5.4.</span> <span class="nav-text">Fiber关键特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fiber%E6%89%A7%E8%A1%8C%E9%98%B6%E6%AE%B5"><span class="nav-number">1.5.5.</span> <span class="nav-text">Fiber执行阶段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reference"><span class="nav-number">1.6.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Cheng Huang</p>
+  <div class="site-description" itemprop="description">记录生活 留下感动 | Leave an impression in my life by recording routines</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kouteisang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kouteisang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:huangchengadam@gmail.com" title="E-Mail → mailto:huangchengadam@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/iamkoutei3n" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;iamkoutei3n" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/kouteisang/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;kouteisang&#x2F;" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/09/react%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Cheng Huang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cheng Huang's Blog">
+      <meta itemprop="description" content="记录生活 留下感动 | Leave an impression in my life by recording routines">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="react原理 | Cheng Huang's Blog">
+      <meta itemprop="description" content="react中的fiber">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          react原理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-07-09 15:37:35" itemprop="dateCreated datePublished" datetime="2022-07-09T15:37:35+02:00">2022-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-12 16:51:25" itemprop="dateModified" datetime="2022-07-12T16:51:25+02:00">2022-07-12</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/07/09/react%E5%8E%9F%E7%90%86/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/09/react原理/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">react中的fiber</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="虚拟dom"><a href="#虚拟dom" class="headerlink" title="虚拟dom"></a>虚拟dom</h1><h2 id="什么是虚拟dom"><a href="#什么是虚拟dom" class="headerlink" title="什么是虚拟dom"></a>什么是虚拟dom</h2><p>react使用虚拟dom，虚拟dom其实就是用JS对象表示的一个dom节点，内部包含了节点的tag，props和children。</p>
+<p>为何使用虚拟dom是因为直接操作真是dom十分低效。</p>
+<h2 id="如何将JSX转换成虚拟dom"><a href="#如何将JSX转换成虚拟dom" class="headerlink" title="如何将JSX转换成虚拟dom"></a>如何将JSX转换成虚拟dom</h2><p>通过babel可以将jsx编译为特定的JS对象。</p>
+<p>从babel的编译结果可以看出，虚拟dom中包含了创建dom所需要的各种信息，对于首次渲染，直接按照这些信息创建dom即可。</p>
+<p>但是虚拟dom的真正价值在于更新，当一个list中的某项发生了变化，或者删除或增加了若干项，通过对比前后的虚拟dom树，最小化的更新真实dom。这就是react的核心目标。</p>
+<ol>
+<li>虚拟dom是一个object一般对象</li>
+<li>虚拟dom比较”轻量”, 而真实dom比较重（这里所说的轻重指的是虚拟dom中所包含的属性较少，而真实dom包含的属性很多），因为虚拟dom是react内部在用，无需真实dom上那么多属性。</li>
+<li>虚拟dom最终会被react转化为真实dom，呈现在页面上。</li>
+</ol>
+<h2 id="react-diffing算法"><a href="#react-diffing算法" class="headerlink" title="react diffing算法"></a>react diffing算法</h2><p>React最大的优势是不是每一次都对页面上的真实dom作出修改，每一个真实dom都对应了虚拟dom的，当生成了新的虚拟dom，react会将新的虚拟dom和旧的虚拟dom进行比较，比较之后没有变化的数据页面上的真实dom是没有任何改变的。只把改变的映射成新的真实dom放到页面上。</p>
+<p>react diffing算法对比的最小粒度是标签，如果存在标签的嵌套，diffing算法会对标签进行逐层对比。</p>
+<p>经典面试题目：在遍历的时候react&#x2F;vue中的key有什么作用？</p>
+<p>简单的说：key是虚拟dom对象的标识，在更新显示时key起着极其重要的作用。</p>
+<p>详细的说：当状态中的数据发生变化时，react会根据【新数据】生成【新的虚拟DOM】，随后React进行【新虚拟DOM】与【旧虚拟DOM】的diff比较。</p>
+<ol>
+<li>若旧虚拟DOM中找到了与新虚拟DOM相同的key：</li>
+</ol>
+<ul>
+<li><p>若虚拟DOM中的内容没变，直接使用之前的真实DOM</p>
+</li>
+<li><p>若虚拟DOM中的内容变了，则生成新的真实DOM，随后替换掉页面中之前的真实DOM</p>
+</li>
+</ul>
+<ol start="2">
+<li>旧虚拟DOM中未找到与新虚拟DOM相同的key</li>
+</ol>
+<ul>
+<li>根据数据创建新的真实DOM，随后渲染到页面</li>
+</ul>
+<h2 id="用index作为key可能会引发的问题"><a href="#用index作为key可能会引发的问题" class="headerlink" title="用index作为key可能会引发的问题"></a>用index作为key可能会引发的问题</h2><ol>
+<li><p>若对数据进行：逆序添加、删除等破坏顺序操作会产生没有必要的真实DOM更新 &#x3D;&#x3D;》 界面效果没问题，但是效率低下。</p>
+</li>
+<li><p>如果结构中还包括输入类的DOM，会产生错误DOM更新 &#x3D;&#x3D;》界面有问题。</p>
+</li>
+<li><p>注意！如果不存在对数据的逆序添加、逆序删除等破坏顺序的操作，仅仅用于旋渲染列表用于展示，使用index作为key是没有问题的。</p>
+</li>
+<li><p>开发时最好使用每条数据的唯一标识作为key，比如id。</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">import &#123; useState &#125; from &quot;react&quot;;</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">  使用index索引值作为key</span><br><span class="line">*/</span><br><span class="line">function App() &#123;</span><br><span class="line">  let persons = [</span><br><span class="line">    &#123;id:1, name:&quot;小张&quot;, age: 18&#125;,</span><br><span class="line">    &#123;id:2, name:&quot;小李&quot;, age: 19&#125;, </span><br><span class="line">  ]</span><br><span class="line">  </span><br><span class="line">  const [person, setPerson] = useState(persons);</span><br><span class="line"></span><br><span class="line">  const addPerson = ()=&gt;&#123;</span><br><span class="line">    const p = &#123;id:persons.length+1, name:&quot;小王&quot;, age:20&#125;;</span><br><span class="line">    setPerson([p, ...persons])</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;App&quot;&gt;</span><br><span class="line">      &lt;h2&gt;展示人员信息&lt;/h2&gt;</span><br><span class="line">      &lt;button onClick = &#123;addPerson&#125;&gt;添加一个小王&lt;/button&gt;</span><br><span class="line">      &lt;h3&gt;使用index索引值作为key&lt;/h3&gt;</span><br><span class="line">      &lt;ul&gt;</span><br><span class="line">        &#123;</span><br><span class="line">          person.map((personObj, index) =&gt; &#123;</span><br><span class="line">            return &lt;li key = &#123;index&#125;&gt;</span><br><span class="line">              &#123;personObj.name&#125; -- &#123;personObj.age&#125;</span><br><span class="line">              &lt;input type=&quot;text&quot;&gt;&lt;/input&gt;</span><br><span class="line">              &lt;/li&gt;</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &lt;/ul&gt;</span><br><span class="line">      &lt;hr/&gt;</span><br><span class="line">      &lt;h3&gt;使用数据的唯一标识作为key&lt;/h3&gt;</span><br><span class="line">      &lt;ul&gt;</span><br><span class="line">        &#123;</span><br><span class="line">          person.map((personObj) =&gt; &#123;</span><br><span class="line">            return &lt;li key = &#123;personObj.id&#125;&gt;</span><br><span class="line">              &#123;personObj.name&#125; -- &#123;personObj.age&#125;</span><br><span class="line">              &lt;input type=&quot;text&quot;&gt;&lt;/input&gt;</span><br><span class="line">              &lt;/li&gt;</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &lt;/ul&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default App;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="React-Fiber"><a href="#React-Fiber" class="headerlink" title="React Fiber"></a>React Fiber</h2><p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220712145801.png"></p>
+<h3 id="Fiber作用"><a href="#Fiber作用" class="headerlink" title="Fiber作用"></a>Fiber作用</h3><p>支持虚拟DOM的渐进式渲染，Fiber 将原有的 Stack Reconciler 替换为 Fiber Reconciler，提高了复杂应用的可响应性和性能。</p>
+<h3 id="为什么会出现Fiber"><a href="#为什么会出现Fiber" class="headerlink" title="为什么会出现Fiber"></a>为什么会出现Fiber</h3><p>React15中stack reconciler是通过递归更新子组件。由于递归执行，所以一旦开始，中途就无法中断。当层级很深的时候，递归更新时间超过了16ms，用户交互就会卡顿。（一帧更新60次，平均下来一帧16ms）</p>
+<p>我们都知道react 是基于虚拟dom 来分析页面中的dom 元素的变化的，组件需要更新的时候，react 需要同步计算虚拟dom 的变化–&gt;对比新旧虚拟dom–&gt;更新真实dom,因为是同步的，所以当一个组件深层嵌套的时候，庞大的同步计算量会让浏览器无暇去处理别的页面交互，比如说相应用户的input 输入等等你 原来写好的交互事件，用户会觉得页面明显卡顿。</p>
+<p>简单理解就是把一个耗时长的任务分解为一个个的工作单元（每个工作单元运行时间很短，不过总时间依然很长）。在执行工作单元之前，由浏览器判断是否有空余时间执行，有时间就执行工作单元，执行完成后，继续判断是否还有空闲时间。没有时间就终止执行让浏览器执行其他任务（如 GUI 线程等）。等到下一帧执行时判断是否有空余时间，有时间就从终止的地方继续执行工作单元,一直重复到任务结束。</p>
+<p>要知道每一帧的空闲时间，就需要使用 requestIdleCallback Api。传入回调函数，回调函数接收一个参数（剩余时间），如果有剩余时间，那么就执行工作单元，如果时间不足了，则继续requestIdleCallback，等到下一帧继续判断。</p>
+<h3 id="什么是Fiber？"><a href="#什么是Fiber？" class="headerlink" title="什么是Fiber？"></a>什么是Fiber？</h3><ol>
+<li>Fiber其实指的是一种数据结构，它可以用一个纯JS对象来表示。</li>
+</ol>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const fiber = &#123;</span><br><span class="line">  stateNode, //节点实例</span><br><span class="line">  child, // 子节点</span><br><span class="line">  sibling, // 兄弟节点</span><br><span class="line">  return, // 父节点</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Fiber还是一个执行单元，每次执行完一个执行单元，React就会检查现在还剩多少时间，如果没有时间就将控制权让出去。</li>
+</ol>
+<h3 id="Fiber关键特性"><a href="#Fiber关键特性" class="headerlink" title="Fiber关键特性"></a>Fiber关键特性</h3><ol>
+<li>增量渲染：将渲染任务拆分到每一帧里面去执行。</li>
+<li>暂停终止复用渲染任务</li>
+<li>不同更新的优先级：在更新时赋予不同任务不同的优先级，高优先级的比如键盘的输入事件，我们希望立马得到反馈</li>
+<li>并发方面新的基础能力：React可以暂停高消耗非紧急的组件渲染，聚焦在更紧迫的任务中， 例如UI渲染，使应用保持可应用高响应，避免白屏、卡顿等现象。</li>
+</ol>
+<h3 id="Fiber执行阶段"><a href="#Fiber执行阶段" class="headerlink" title="Fiber执行阶段"></a>Fiber执行阶段</h3><p> Fiber每次渲染有两个阶段：Reconciliation(协调render阶段)和commit(提交阶段)</p>
+<p> Reconciliation：这个阶段可以认为是diff阶段，这个阶段可以被终止，这个阶段会找出所有变更的节点，例如节点新增、删除、属性变更等等，这些变更react称之为副作用。</p>
+<p> 提交阶段：将上一阶段计算出来的需要处理的副作用(effects)一次性执行了。这个阶段必须同步执行，不能被打断。</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p> <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1882296#:~:text=Fiber%20%E6%98%AFReact%2016%20%E4%B8%AD,%E5%A4%8D%E6%9D%82%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%88%86%E7%89%87%E3%80%82">https://cloud.tencent.com/developer/article/1882296#:~:text=Fiber%20%E6%98%AFReact%2016%20%E4%B8%AD,%E5%A4%8D%E6%9D%82%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%88%86%E7%89%87%E3%80%82</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"># react</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/07/09/JS%E9%98%B2%E6%8A%96-%E8%8A%82%E6%B5%81/" rel="prev" title="JS防抖&节流">
+                  <i class="fa fa-chevron-left"></i> JS防抖&节流
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cheng Huang | 黄程</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"iamkoutei","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
