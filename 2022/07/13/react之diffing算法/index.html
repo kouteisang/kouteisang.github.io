@@ -20,28 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="My name is Cheng and you can also call me Koutei. If you happen to speak Chinese, my Chinese name is 黄程(huáng chéng). Currently, I am a master student in Computer Science department at Aarhus Universi">
-<meta property="og:type" content="website">
-<meta property="og:title" content="About">
-<meta property="og:url" content="http://example.com/about/index.html">
+    <meta name="description" content="本文根据react官方文档进行翻译描述react中的diffing算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react之diffing算法">
+<meta property="og:url" content="http://example.com/2022/07/13/react%E4%B9%8Bdiffing%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="Cheng Huang&#39;s Blog">
-<meta property="og:description" content="My name is Cheng and you can also call me Koutei. If you happen to speak Chinese, my Chinese name is 黄程(huáng chéng). Currently, I am a master student in Computer Science department at Aarhus Universi">
+<meta property="og:description" content="本文根据react官方文档进行翻译描述react中的diffing算法">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-06-17T18:35:30.000Z">
-<meta property="article:modified_time" content="2022-06-20T15:30:45.530Z">
+<meta property="article:published_time" content="2022-07-13T12:09:28.000Z">
+<meta property="article:modified_time" content="2022-07-13T12:57:19.688Z">
 <meta property="article:author" content="Cheng Huang">
+<meta property="article:tag" content="react">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/about/">
+<link rel="canonical" href="http://example.com/2022/07/13/react%E4%B9%8Bdiffing%E7%AE%97%E6%B3%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"en","comments":true,"permalink":"http://example.com/about/index.html","path":"about/index.html","title":"About"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/07/13/react%E4%B9%8Bdiffing%E7%AE%97%E6%B3%95/","path":"2022/07/13/react之diffing算法/","title":"react之diffing算法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>About | Cheng Huang's Blog
-</title>
+<title>react之diffing算法 | Cheng Huang's Blog</title>
   
 
 
@@ -103,7 +103,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -116,6 +116,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-diffing-%E5%B7%AE%E5%BC%82%E5%8C%96-%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">React diffing(差异化)算法</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -176,36 +177,126 @@
 </noscript>
 
 
-    <div class="main-inner page posts-expand">
+    <div class="main-inner post posts-expand">
 
 
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/13/react%E4%B9%8Bdiffing%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Cheng Huang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cheng Huang's Blog">
+      <meta itemprop="description" content="记录生活 留下感动 | Leave an impression in my life by recording routines">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="react之diffing算法 | Cheng Huang's Blog">
+      <meta itemprop="description" content="本文根据react官方文档进行翻译描述react中的diffing算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          react之diffing算法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-07-13 14:09:28 / Modified: 14:57:19" itemprop="dateCreated datePublished" datetime="2022-07-13T14:09:28+02:00">2022-07-13</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
     
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
     
-    
-    <div class="post-block" lang="en"><header class="post-header">
-
-<h1 class="post-title" itemprop="name headline">About
-</h1>
-
-<div class="post-meta-container">
+    <a title="disqus" href="/2022/07/13/react%E4%B9%8Bdiffing%E7%AE%97%E6%B3%95/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/13/react之diffing算法/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
 </div>
 
-</header>
+            <div class="post-description">本文根据react官方文档进行翻译描述react中的diffing算法</div>
+        </div>
+      </header>
 
-      
-      
-      <div class="post-body">
-          <p>My name is Cheng and you can also call me Koutei. If you happen to speak Chinese, my Chinese name is 黄程(huáng chéng). Currently, I am a master student in Computer Science department at Aarhus University in Denmark. I am passionate about JavaScript &#x2F; Java development, Machine Learning and Data Mining, you can see most of my work in <a href='https://github.com/kouteisang' target='_blank'>Github</a>.</p>
-<p>Out of programming, I enjoy listening to music, running, cycling and keeping green plants. You can follow my <a href="https://twitter.com/iamkoutei3n" target='_blank'>Twitter</a> and <a href="https://www.instagram.com/kouteisang/" target='_blank'> Instagram </a> where I mostly share some daily life.</p>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>每次当我们调用render()方法时都会根据react element去创建一棵树。当props或者state变化的时候render()会返回给我们一棵新的树。React需要想办法找出两棵树的不同，并进行快速更新。</p>
+<p>将一棵树转换成另外一个树经过最小的操作步骤是有一些通用的算法的，但是时间复杂度极高O(n^3)，n在这里是element的数量。当我们有1000个element的时候时间复杂度将变的不可接受。</p>
+<p>React使用了O(N)的时间复杂度去解决这个问题，这基于两个假设。</p>
+<ol>
+<li>不同类型的元素会产生不同的树。</li>
+<li>通过key属性进行判断。</li>
+</ol>
+<h2 id="React-diffing-差异化-算法"><a href="#React-diffing-差异化-算法" class="headerlink" title="React diffing(差异化)算法"></a>React diffing(差异化)算法</h2><ol>
+<li>当根元素有不同的类型时，react会拆除旧树，并且构建新的树。包括其子节点。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">旧 -&gt; 新</span><br><span class="line">&lt;a/&gt; -&gt; &lt;img/&gt;</span><br><span class="line">&lt;Article/&gt; -&gt; &lt;Comment/&gt;</span><br><span class="line">&lt;Button/&gt; -&gt; &lt;div/&gt;</span><br></pre></td></tr></table></figure>
 
-      </div>
-      
-      
-      
+<p>旧的树被拆除的意思是执行componentWillUnmount()。创建新的树会执行UNSAFE_componentWillMount()和componentDidMount()。因为旧的树会被拆除，所以旧的树中的state会丢失，且其子元素以及孙子元素等等会被拆除掉。</p>
+<ol start="2">
+<li>当两个dom元素有相同类型时，react会查看他们所拥有的属性，并将不同的属性进行更新。<br>比如下面的例子，react知道只需要更新div元素中的className。之后react会递归处理 其子节点。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div className=&quot;before&quot; title=&quot;stuff&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;div className=&quot;after&quot; title=&quot;stuff&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>当组件元素有相同的类型，会执行相应的生命周期函数，对更新前和更新后render函数返回的树进行diff</li>
+</ol>
+
     </div>
 
     
     
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"># react</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/07/09/react%E5%8E%9F%E7%90%86/" rel="prev" title="react原理">
+                  <i class="fa fa-chevron-left"></i> react原理
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
 
 
     
