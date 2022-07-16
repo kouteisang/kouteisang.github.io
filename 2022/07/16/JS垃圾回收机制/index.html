@@ -20,29 +20,32 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="JS静态作用域">
+    <meta name="description" content="本文讲解JS的垃圾回收机制">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS静态作用域">
-<meta property="og:url" content="http://example.com/2022/06/27/JS%E9%9D%99%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F/index.html">
+<meta property="og:title" content="JS垃圾回收机制">
+<meta property="og:url" content="http://example.com/2022/07/16/JS%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/index.html">
 <meta property="og:site_name" content="Cheng Huang&#39;s Blog">
-<meta property="og:description" content="JS静态作用域">
+<meta property="og:description" content="本文讲解JS的垃圾回收机制">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-06-27T14:33:30.000Z">
-<meta property="article:modified_time" content="2022-06-27T15:19:29.584Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220716144703.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220716150626.png">
+<meta property="article:published_time" content="2022-07-16T12:05:37.000Z">
+<meta property="article:modified_time" content="2022-07-16T13:06:40.960Z">
 <meta property="article:author" content="Cheng Huang">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="Interview">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220716144703.png">
 
 
-<link rel="canonical" href="http://example.com/2022/06/27/JS%E9%9D%99%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F/">
+<link rel="canonical" href="http://example.com/2022/07/16/JS%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/06/27/JS%E9%9D%99%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F/","path":"2022/06/27/JS静态作用域/","title":"JS静态作用域"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/07/16/JS%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/","path":"2022/07/16/JS垃圾回收机制/","title":"JS垃圾回收机制"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>JS静态作用域 | Cheng Huang's Blog</title>
+<title>JS垃圾回收机制 | Cheng Huang's Blog</title>
   
 
 
@@ -104,7 +107,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -117,6 +120,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">引用计数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#limitation"><span class="nav-number">1.1.</span> <span class="nav-text">limitation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4-mark-and-sweep"><span class="nav-number">2.</span> <span class="nav-text">标记清除 mark and sweep</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#limitation-1"><span class="nav-number">2.1.</span> <span class="nav-text">limitation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-V8%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text">Node V8的垃圾回收机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reference"><span class="nav-number">3.1.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -188,7 +192,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/27/JS%E9%9D%99%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/16/JS%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -201,12 +205,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="JS静态作用域 | Cheng Huang's Blog">
-      <meta itemprop="description" content="JS静态作用域">
+      <meta itemprop="name" content="JS垃圾回收机制 | Cheng Huang's Blog">
+      <meta itemprop="description" content="本文讲解JS的垃圾回收机制">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          JS静态作用域
+          JS垃圾回收机制
         </h1>
 
         <div class="post-meta-container">
@@ -218,7 +222,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2022-06-27 16:33:30 / Modified: 17:19:29" itemprop="dateCreated datePublished" datetime="2022-06-27T16:33:30+02:00">2022-06-27</time>
+      <time title="Created: 2022-07-16 14:05:37 / Modified: 15:06:40" itemprop="dateCreated datePublished" datetime="2022-07-16T14:05:37+02:00">2022-07-16</time>
     </span>
 
   
@@ -230,15 +234,15 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2022/06/27/JS%E9%9D%99%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/27/JS静态作用域/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2022/07/16/JS%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/16/JS垃圾回收机制/" itemprop="commentCount"></span>
     </a>
   </span>
   
   
 </div>
 
-            <div class="post-description">JS静态作用域</div>
+            <div class="post-description">本文讲解JS的垃圾回收机制</div>
         </div>
       </header>
 
@@ -246,16 +250,37 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>首先我们要明确，JS是词法作用域，即：静态作用域</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var value = 1;</span><br><span class="line"></span><br><span class="line">function foo()&#123;</span><br><span class="line">    console.log(value)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function bar()&#123;</span><br><span class="line">    var value = 2;</span><br><span class="line">    foo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bar();</span><br></pre></td></tr></table></figure>
-<p>bar()的输出为1，这是为什么呢？</p>
-<p>因为JS采用静态作用域，在其执行完foo()函数后，在其内部查找是否有局部变量value，如果没有就根据书写的为止，查找上面一层的代码，也就是value等于1，所以结果会打印1。</p>
-<p>如果我们把</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var value = 1 </span><br></pre></td></tr></table></figure>
-<p>这行代码删除掉，那么再执行这行代码就会报错，因为我们找不到value这个变量。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var scope = &quot;global scope&quot;;</span><br><span class="line">function checkscope()&#123;</span><br><span class="line">    var scope = &quot;local scope&quot;;</span><br><span class="line">    function f()&#123;</span><br><span class="line">        return scope;</span><br><span class="line">    &#125;</span><br><span class="line">    return f;</span><br><span class="line">&#125;</span><br><span class="line">console.log(checkscope()());</span><br></pre></td></tr></table></figure>
+        <p>JS有垃圾回收机制，可以帮我们释放不再使用的变量所占用的内存。</p>
+<h2 id="引用计数"><a href="#引用计数" class="headerlink" title="引用计数"></a>引用计数</h2><p>这是最初级的垃圾收集算法。如果一个对象没有别的对象引用它(即0引用)，这个对象将被垃圾回收机制回收。</p>
+<h3 id="limitation"><a href="#limitation" class="headerlink" title="limitation"></a>limitation</h3><p>该算法无法处理循环引用，如下面的例子中两个对象都已经被创建了。并相互引用。形成了一个循环。f()被调用之后会离开作用域，所以他们已经没有用了，可以被回收了。然而，引用计数算法考虑到他们相互至少都有依次引用，所以他们不会被回收。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function f()&#123;</span><br><span class="line">    var o = &#123;&#125;;</span><br><span class="line">    var o2 = &#123;&#125;;</span><br><span class="line">    o.a = o2;</span><br><span class="line">    o2.a = o;</span><br><span class="line">&#125;</span><br><span class="line">f();</span><br></pre></td></tr></table></figure>
 
-<p>那么下面这个代码会输出什么呢？答案是local scope，那是因为JavaScript采用的是词法作用域，函数的作用域基于函数创建的位置。</p>
+<h2 id="标记清除-mark-and-sweep"><a href="#标记清除-mark-and-sweep" class="headerlink" title="标记清除 mark and sweep"></a>标记清除 mark and sweep</h2><p>标记清理是JS最常用的回收策略。</p>
+<p>准确来讲标记清除算法包括两部分，标记阶段和清除阶段。标记阶段为所有的活动对象做上标记，清除阶段则把没有标记的对象(也就是非活动对象)摧毁。</p>
+<p>标记清除算法的大概流程如下：</p>
+<ul>
+<li>垃圾回收机运行时会给内存中所有变量加一个标记，假设内存中的对象都是垃圾，全标记0。</li>
+<li>从根对象（全局对象）开始遍历，把不是垃圾的节点改成1。</li>
+<li>清理所有标记为0的垃圾，销毁并回收他们所占用的内存空间</li>
+<li>最后，把所有内存中对象标记修改为0，等待下一轮垃圾回收。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MDN:</span><br><span class="line">这个算法假定设置一个叫做根（root）的对象（在 Javascript 里，根是全局对象）。垃圾回收器将定期从根开始，找所有从根开始引用的对象，然后找这些对象引用的对象……从根开始，垃圾回收器将找到所有可以获得的对象和收集所有不能获得的对象。</span><br></pre></td></tr></table></figure>
+
+<h3 id="limitation-1"><a href="#limitation-1" class="headerlink" title="limitation"></a>limitation</h3><ul>
+<li>由于从根对象（全局对象）开始查找，对于那些无法从根对象查询到的对象都将会被清除。</li>
+<li>会造成内存碎片。</li>
+</ul>
+<h2 id="Node-V8的垃圾回收机制"><a href="#Node-V8的垃圾回收机制" class="headerlink" title="Node V8的垃圾回收机制"></a>Node V8的垃圾回收机制</h2><p>Node V8分为新生代和老年代，新生代的空间比老年代要小。新生代存储的为存活时间较短的对象，老年代存储存活时间较长的对象。</p>
+<p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220716144703.png"></p>
+<p>其中新生代又被平均分成两个相同大小的区域(semispace)。分别称为From区和to区域。</p>
+<p>当我们分配对象时，先是在From空间中进行分配。当开始进行垃圾回收时，会检查From空间中的存活对象，这些存活对象将被复制到To空间中，而(From空间内的)非存活对象占用的空间将会被释放。完成复制后，From空间和To空间的角色发生对换(即以前的From空间释放后变为To;To空间在复制存活的对象后,变为From空间)。</p>
+<p>From空间中的存活对象在复制到To空间之前需要进行检查。在一定条件下，需要将存活周期长的对象移动到老生代中，也就是完成对象晋升。</p>
+<p>对象晋升的条件主要有两个，一个是对象是否经历过Scavenge回收，一个是To空间的内存占用比超过25%限制。</p>
+<p>老年太区域使用mark-sweep(标记清除)算法和mark-compact(标记整理)算法</p>
+<p>因为标记清除算法会造成很多空间碎片，所以使用标记整理算法，标记整理算法会将存活的对象挪到一边往一端移动，移动完成后，将剩余对象清理。这样就减少了内存碎片。</p>
+<p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220716150626.png"></p>
+<h3 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Memory_Management">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Memory_Management</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6981588276356317214">https://juejin.cn/post/6981588276356317214</a></p>
 
     </div>
 
@@ -273,14 +298,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/06/27/JS%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/" rel="prev" title="JS原型和原型链">
-                  <i class="fa fa-chevron-left"></i> JS原型和原型链
+                <a href="/2022/07/16/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="git常用命令">
+                  <i class="fa fa-chevron-left"></i> git常用命令
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/06/27/JS%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E5%92%8C%E5%87%BD%E6%95%B0%E6%8F%90%E5%8D%87/" rel="next" title="JS变量提升和函数提升">
-                  JS变量提升和函数提升 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
