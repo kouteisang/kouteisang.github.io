@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="总结跨域问题解决方案">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS跨域">
+<meta property="og:url" content="http://example.com/2022/07/17/JS%E8%B7%A8%E5%9F%9F/index.html">
+<meta property="og:site_name" content="Cheng Huang&#39;s Blog">
+<meta property="og:description" content="总结跨域问题解决方案">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220717152505.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220717153430.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220717154401.png">
+<meta property="article:published_time" content="2022-07-17T08:28:14.000Z">
+<meta property="article:modified_time" content="2022-07-17T14:50:52.906Z">
+<meta property="article:author" content="Cheng Huang">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220717152505.png">
+
+
+<link rel="canonical" href="http://example.com/2022/07/17/JS%E8%B7%A8%E5%9F%9F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/07/17/JS%E8%B7%A8%E5%9F%9F/","path":"2022/07/17/JS跨域/","title":"JS跨域"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JS跨域 | Cheng Huang's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Cheng Huang's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B7%A8%E5%9F%9F%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是跨域？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">跨域解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80-JSONP"><span class="nav-number">2.1.</span> <span class="nav-text">方案一 : JSONP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSONP-%E7%BC%BA%E7%82%B9"><span class="nav-number">2.1.1.</span> <span class="nav-text">JSONP 缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C-CORS"><span class="nav-number">2.2.</span> <span class="nav-text">方案二 : CORS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%B8%89-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">2.3.</span> <span class="nav-text">方案三 : 反向代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E4%B8%80"><span class="nav-number">2.3.1.</span> <span class="nav-text">解决方案一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#limitation"><span class="nav-number">2.3.2.</span> <span class="nav-text">limitation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="nav-number">2.3.3.</span> <span class="nav-text">方法二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reference"><span class="nav-number">2.4.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Cheng Huang</p>
+  <div class="site-description" itemprop="description">记录生活 留下感动 | Leave an impression in my life by recording routines</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kouteisang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kouteisang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:huangchengadam@gmail.com" title="E-Mail → mailto:huangchengadam@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/iamkoutei3n" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;iamkoutei3n" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/kouteisang/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;kouteisang&#x2F;" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/17/JS%E8%B7%A8%E5%9F%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Cheng Huang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cheng Huang's Blog">
+      <meta itemprop="description" content="记录生活 留下感动 | Leave an impression in my life by recording routines">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JS跨域 | Cheng Huang's Blog">
+      <meta itemprop="description" content="总结跨域问题解决方案">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JS跨域
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-07-17 10:28:14 / Modified: 16:50:52" itemprop="dateCreated datePublished" datetime="2022-07-17T10:28:14+02:00">2022-07-17</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/07/17/JS%E8%B7%A8%E5%9F%9F/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/17/JS跨域/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">总结跨域问题解决方案</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="什么是跨域？"><a href="#什么是跨域？" class="headerlink" title="什么是跨域？"></a>什么是跨域？</h1><p>我们常说的“跨域”其实就是获取不同源(协议+域名+端口)的资源时，浏览器自身作出的限制。</p>
+<p>当我们请求的资源我们自身的资源（协议&#x2F;域名&#x2F;端口）三者又一个不同时，就叫做跨域。</p>
+<h1 id="跨域解决方案"><a href="#跨域解决方案" class="headerlink" title="跨域解决方案"></a>跨域解决方案</h1><h2 id="方案一-JSONP"><a href="#方案一-JSONP" class="headerlink" title="方案一 : JSONP"></a>方案一 : JSONP</h2><p>在讲解JSONP之前我们要知道为什么在script标签里引入了外部资源不存在跨域问题呢？那是因为我们的script标签允许从别的源请求脚本。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">function bb(data)&#123;</span><br><span class="line">    console.log(data)</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src = &quot;http://xxxx?callback=bb&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="JSONP-缺点"><a href="#JSONP-缺点" class="headerlink" title="JSONP 缺点"></a>JSONP 缺点</h3><ul>
+<li>JSONP只允许GET请求</li>
+<li>JSONP需要服务器端的配合</li>
+</ul>
+<h2 id="方案二-CORS"><a href="#方案二-CORS" class="headerlink" title="方案二 : CORS"></a>方案二 : CORS</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: * // 允许任何域访问</span><br><span class="line">Access-Control-Allow-Headers: * // 允许任何操作方法</span><br></pre></td></tr></table></figure>
+
+<p>这种方式，当浏览器发出的请求发delete、put、post时，浏览器会自动发出一个预检请求，其请求方式为options</p>
+<h2 id="方案三-反向代理"><a href="#方案三-反向代理" class="headerlink" title="方案三 : 反向代理"></a>方案三 : 反向代理</h2><p>我们应该知道跨域的本质问题是我们的请求可以正常的发送，但是当服务器端响应数据后，我们的数据被ajax引擎所拦截。</p>
+<p>假如说我们的前端项目在3000端口，服务器端在5000端口。反向代理是在3000端口又开了一个十分微小的服务器。即代理服务和我们前端在同源下。</p>
+<p>每次我们在发送请求的时候，前端把请求发给代理服务，然后代理服务再将请求转发给5000服务器端口。 </p>
+<p>然后服务器将数据返回给3000端口的代理服务(此时虽然也产生了跨域，但是由于代理服务没有ajax引擎，所以不会出现跨域问题，这里代理是通过请求转发的形式转发请求和数据，所以同源策略无法限制代理服务)，代理服务再将数据返回给我们前端项目。</p>
+<p><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220717152505.png"></p>
+<h3 id="解决方案一"><a href="#解决方案一" class="headerlink" title="解决方案一"></a>解决方案一</h3><p>在package.json目录下新增proxy，url为服务端url<br><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220717153430.png"></p>
+<p>前端请求时应该请求前端所在地址（因为代理）<br><img src="https://raw.githubusercontent.com/kouteisang/img-blog-store/main/20220717154401.png"></p>
+<h3 id="limitation"><a href="#limitation" class="headerlink" title="limitation"></a>limitation</h3><ul>
+<li><p>这种方法的缺点是，因为我请求的是我自身，当我自身有这个资源的时候就不会再请求服务端了（优先匹配前端资源）。</p>
+</li>
+<li><p>只能配置一个后端服务器地址</p>
+</li>
+</ul>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>通过setupProxy.js进行配置,注意该文件放置在src下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">const &#123;createProxyMiddleware&#125; = require(&#x27;http-proxy-middleware&#x27;)</span><br><span class="line"></span><br><span class="line">module.exports = function(app)&#123;</span><br><span class="line">    app.use(</span><br><span class="line">         // 遇见api1前缀的请求就会触发该代理配置</span><br><span class="line">       createProxyMiddleware(&#x27;/api1&#x27;,&#123;</span><br><span class="line">           // 请求转发给谁</span><br><span class="line">           target:&#x27;http://localhost:5000&#x27;, </span><br><span class="line">           // 控制服务器收到的请求头host字段的值，</span><br><span class="line">           // 如果为false或者不加这个字段，那么请求头中host为真实的前端所在地址，</span><br><span class="line">           // 如果为true，则请求头中的host为服务器的地址 </span><br><span class="line">           // 一般我们设置为true </span><br><span class="line">           changeOrigin:true, </span><br><span class="line">           // 重写请求路径</span><br><span class="line">           pathRewrite:&#123;&#x27;^/api1&#x27;:&#x27;&#x27;&#125;</span><br><span class="line">       &#125;),</span><br><span class="line">       // 遇见api2的请求就会触发该代理配置</span><br><span class="line">       createProxyMiddleware(&#x27;/api2&#x27;,&#123;</span><br><span class="line">           target:&#x27;http://localhost:5001&#x27;,</span><br><span class="line">           changeOrigin:true,</span><br><span class="line">           pathRewrite:&#123;&#x27;^/api2&#x27;:&#x27;&#x27;&#125;</span><br><span class="line">       &#125;)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用该方法可以配置多个代理，可以灵活的控制请求是否走代理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 发送请求时我们需要带着/api1，然后根据配置文件我们可知/api1走5000服务器端口,</span><br><span class="line">// pathRewrite:&#123;&#x27;^/api1&#x27;:&#x27;&#x27;&#125;又可以把^/api1替换成空</span><br><span class="line">// 所以最终发送请求的路径为 http://localhost:3000/students</span><br><span class="line">const getStudentData = async() =&gt; &#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            let res = await axios.get(&quot;http://localhost:3000/api1/students&quot;)</span><br><span class="line">            console.log(res)</span><br><span class="line">        &#125;catch(e)&#123;</span><br><span class="line">            console.log(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1wy4y1D7JT?p=66&amp;vd_source=89b2771b73ebbc2ec87dc121dbe5184b">https://www.bilibili.com/video/BV1wy4y1D7JT?p=66&amp;vd_source=89b2771b73ebbc2ec87dc121dbe5184b</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/07/16/JS%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" rel="prev" title="JS垃圾回收机制">
+                  <i class="fa fa-chevron-left"></i> JS垃圾回收机制
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/07/17/async-await/" rel="next" title="async await">
+                  async await <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cheng Huang | 黄程</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+-->
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"iamkoutei","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
