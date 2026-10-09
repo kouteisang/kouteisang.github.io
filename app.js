@@ -1,7 +1,7 @@
 (() => {
   const button = document.getElementById('language');
-  let language = 'zh';
-  try { language = localStorage.getItem('cheng-language') === 'en' ? 'en' : 'zh'; } catch {}
+  let language = 'en';
+  try { language = localStorage.getItem('cheng-language') === 'zh' ? 'zh' : 'en'; } catch {}
   function render() {
     document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
     document.querySelectorAll('[data-zh][data-en]').forEach(element => { element.textContent = element.dataset[language]; });
